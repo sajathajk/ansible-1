@@ -1,0 +1,7 @@
+---
+
+- hosts: databases
+  connection: local
+  gather_facts: false
+  roles:
+  - postgres

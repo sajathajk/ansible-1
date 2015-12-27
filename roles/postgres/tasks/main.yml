@@ -1,0 +1,23 @@
+---
+
+- name: data container
+  docker:
+    name: mydata
+    image: busybox
+    state: present
+    volumes:
+    - /data
+    tls_hostname: localhost
+    #use_tls: "no"
+
+- name: postgres container
+  docker:
+    name: mypostgres
+    image: "postgres:{{postgres_docker_image_tag}}"
+    state: started
+    expose:
+    - 5432
+    volumes_from:
+    - mydata
+    tls_hostname: localhost
+    #use_tls: "no"

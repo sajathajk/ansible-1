@@ -1,0 +1,27 @@
+---
+
+- name: Bastion node security group
+  local_action:
+    module: ec2_group
+    name: bastion_sg
+    description: Bastion EC2 node
+    region: "{{ ec2_region }}"
+    state: present
+    rules:
+    - proto: tcp
+      from_port: 22
+      to_port: 22
+      cidr_ip: 0.0.0.0/0
+    rules_egress:
+    - proto: tcp
+      from_port: 80
+      to_port: 80
+      cidr_ip: 0.0.0.0/0
+    - proto: tcp
+      from_port: 443
+      to_port: 443
+      cidr_ip: 0.0.0.0/0
+    - proto: udp
+      from_port: 123
+      to_port: 123
+      cidr_ip: 0.0.0.0/0

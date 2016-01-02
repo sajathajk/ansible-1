@@ -2,10 +2,12 @@
 - name: Find the current login user
   command: whoami
   register: login_user
+  changed_when: False
 
 - name: Find the current hostname
   command: hostname -s
   register: current_hostname
+  changed_when: False
 
 - name: Check if the SSH key exists
   local_action:

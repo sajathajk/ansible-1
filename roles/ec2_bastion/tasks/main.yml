@@ -1,0 +1,3 @@
+---
+- include: sg.yml
+- include: ec2.yml

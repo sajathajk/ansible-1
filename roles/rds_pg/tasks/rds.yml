@@ -18,6 +18,7 @@
     maint_window: "{{ rds_maint_window }}"
     backup_retention: "{{ rds_backup_retention_days }}"
     backup_window: "{{ rds_backup_window }}"
+    wait: yes
     tags:
       Environment: "{{ ec2_tag_Environment }}"
       Name: "{{ rds_instance_name }}"

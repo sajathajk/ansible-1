@@ -1,0 +1,10 @@
+---
+- name: RDS parameter group
+  local_action:
+    module: rds_param_group
+    state: present
+    name: "{{ rds_param_group_name }}"
+    description: RDS parameter group
+    region: "{{ rds_region }}"
+    engine: "{{ rds_param_group_engine }}"
+    params: "{{ rds_params }}"

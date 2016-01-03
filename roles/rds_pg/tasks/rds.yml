@@ -10,6 +10,7 @@
     size: "{{ rds_size_gb }}"
     username: "{{ rds_username }}"
     password: "{{ rds_password }}"
+    parameter_group: "{{ rds_param_group_name }}"
     publicly_accessible: "{{ rds_publicly_accessible }}"
     multi_zone: "{{ rds_multi_zone }}"
     vpc_security_groups: "{{ item }}"

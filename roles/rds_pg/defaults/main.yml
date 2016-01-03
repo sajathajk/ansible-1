@@ -3,7 +3,7 @@ rds_region: "{{ ec2_region }}"
 rds_instance_name: vault13
 rds_multi_zone: no
 rds_username: ChosenOne
-rds_password: secret
+rds_password: top_secret
 rds_publicly_accessible: no
 rds_instance_type: db.t2.micro
 rds_backup_retention_days: 0

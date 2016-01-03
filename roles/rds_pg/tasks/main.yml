@@ -1,3 +1,4 @@
 ---
 - include: sg.yml
 - include: rds_subnet_group.yml
+- include: rds.yml

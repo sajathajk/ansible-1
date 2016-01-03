@@ -1,2 +1,4 @@
 ---
 rds_db_engine: postgres
+rds_maint_window: "Mon:03:00-Mon:04:00"
+rds_backup_window: "04:00-05:00"

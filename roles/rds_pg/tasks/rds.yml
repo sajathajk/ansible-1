@@ -1,0 +1,25 @@
+---
+- name: RDS instance
+  local_action:
+    module: rds
+    command: create
+    region: "{{ rds_region }}"
+    db_engine: "{{ rds_db_engine }}"
+    instance_name: "{{ rds_instance_name }}"
+    instance_type: "{{ rds_instance_type }}"
+    size: "{{ rds_size_gb }}"
+    username: "{{ rds_username }}"
+    password: "{{ rds_password }}"
+    publicly_accessible: "{{ rds_publicly_accessible }}"
+    multi_zone: "{{ rds_multi_zone }}"
+    vpc_security_groups: "{{ item }}"
+    subnet: "{{ rds_subnet_group_name }}"
+    upgrade: "{{ rds_upgrade }}"
+    maint_window: "{{ rds_maint_window }}"
+    backup_retention: "{{ rds_backup_retention_days }}"
+    backup_window: "{{ rds_backup_window }}"
+    tags:
+      Environment: "{{ ec2_tag_Environment }}"
+      Name: "{{ rds_instance_name }}"
+  with_items: rds_sg.group_id
+

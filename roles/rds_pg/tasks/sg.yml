@@ -13,3 +13,4 @@
       to_port: 5432
       group_name: rds_client_sg
       group_desc: RDS client security group
+  register: rds_sg

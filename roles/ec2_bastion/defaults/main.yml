@@ -1,5 +1,8 @@
 ---
 ec2_region: eu-west-1
 ec2_key_name: ansible_ec2
-ec2_group: bastion_sg
+ec2_bastion_group_name: ec2_bastion_sg
+ec2_group:
+- "{{ ec2_bastion_group_name }}"
+- rds_client_sg
 ec2_ami_id: ami-bff32ccc # Amazon Linux 2015.09.1 EU Ireland HVM (SSD) EBS-Backed 64-bit

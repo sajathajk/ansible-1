@@ -1,13 +1,15 @@
 ---
 
-- name: RDS | Create RDS Security Group
+- name: RDS security group
   local_action:
     module: ec2_group
-    name: "{{ item.sg_name }}"
-    description: "{{ item.sg_description }}"
-    region: "{{ vpc_region }}" # Change the AWS region here
-    vpc_id: "{{ vpc.vpc_id }}" # vpc is the resgister name, you can also set it manually
+    name: rds_server_sg
+    description: RDS server security group
+    region: "{{ ec2_region }}"
     state: present
-    rules: "{{ item.sg_rules }}"
-  with_items: rds_security_groups
-  register: rds_sg
+    rules:
+    - proto: tcp
+      from_port: 5432
+      to_port: 5432
+      group_name: rds_client_sg
+      group_desc: RDS client security group

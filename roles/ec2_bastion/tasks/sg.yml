@@ -3,8 +3,8 @@
 - name: Bastion node security group
   local_action:
     module: ec2_group
-    name: bastion_sg
-    description: Bastion EC2 node
+    name: "{{ ec2_bastion_group_name }}"
+    description: EC2 bastion security group
     region: "{{ ec2_region }}"
     state: present
     rules:

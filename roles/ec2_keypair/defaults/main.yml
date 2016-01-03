@@ -1,4 +1,3 @@
 ---
 ssh_key_name: ansible_ec2
 ssh_key_location: "~/.ssh/{{ ssh_key_name }}.pem"
-ec2_region: eu-west-1

@@ -6,7 +6,7 @@ rds_username: ChosenOne
 rds_password: top_secret
 rds_publicly_accessible: no
 rds_instance_type: db.t2.micro
-rds_backup_retention_days: 0
+rds_backup_retention_days: 1
 rds_security_group_name: rds_server_sg
 rds_security_groups: "{{ rds_security_group_name }}"
 rds_size_gb: 5

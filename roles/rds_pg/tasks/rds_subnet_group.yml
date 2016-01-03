@@ -1,0 +1,9 @@
+---
+- name: RDS subnet group
+  local_action:
+    module: rds_subnet_group
+    state: present
+    name: "{{ rds_subnet_group_name }}"
+    description: RDS subnet group
+    region: "{{ rds_region }}"
+    subnets: "{{ rds_subnets }}"

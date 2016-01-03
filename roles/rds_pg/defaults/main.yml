@@ -1,2 +1,20 @@
 ---
+rds_region: "{{ ec2_region }}"
+rds_instance_name: vault13
+rds_multi_zone: no
+rds_username: ChosenOne
+rds_password: secret
+rds_publicly_accessible: no
 rds_instance_type: db.t2.micro
+rds_backup_retention_days: 0
+rds_security_group_name: rds_server_sg
+rds_security_groups: "{{ rds_security_group_name }}"
+rds_size_gb: 5
+rds_upgrade: yes
+rds_subnet_group_name: rds_subnet_group
+# TODO: there must be a better way
+rds_subnets:
+- subnet-c29af6b5
+- subnet-7745c32e
+- subnet-53ce8a36
+

@@ -3,7 +3,7 @@
 - name: RDS security group
   local_action:
     module: ec2_group
-    name: rds_server_sg
+    name: "{{ rds_security_group_name }}"
     description: RDS server security group
     region: "{{ ec2_region }}"
     state: present

@@ -1,3 +1,4 @@
 ---
 
 - include: playbooks/rds.yml
+- include: playbooks/riksdagens_data.yml

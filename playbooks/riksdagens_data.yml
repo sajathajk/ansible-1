@@ -1,0 +1,9 @@
+---
+- hosts: tag_Name_bastion
+  gather_facts: no
+  roles:
+  - ansible_manager
+- hosts: rds
+  gather_facts: no
+  roles:
+  - riksdagens_data

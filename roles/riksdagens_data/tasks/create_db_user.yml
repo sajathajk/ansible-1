@@ -1,0 +1,11 @@
+---
+- name: Create database user
+  postgresql_user:
+    db: "{{ db_name }}"
+    login_host: "{{ inventory_hostname }}"
+    login_user: "{{ db_master_user }}"
+    login_password: "{{ db_master_password }}"
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+  delegate_to: "{{ ansible_management_host }}"
+  when: riksdagen_db.changed

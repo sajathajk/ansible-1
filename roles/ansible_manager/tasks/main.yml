@@ -1,0 +1,7 @@
+---
+- name: Install pre-requisites
+  yum:
+    name: "{{ item }}"
+  sudo: yes
+  with_items:
+  - python27-psycopg2

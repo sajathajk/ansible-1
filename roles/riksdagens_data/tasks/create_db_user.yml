@@ -7,5 +7,7 @@
     login_password: "{{ db_master_password }}"
     name: "{{ db_user }}"
     password: "{{ db_password }}"
+    # This would work in Ansible 2.0, see https://github.com/ansible/ansible-modules-core/issues/297
+    # no_password_changes: yes
   delegate_to: "{{ ansible_management_host }}"
   when: riksdagen_db.changed

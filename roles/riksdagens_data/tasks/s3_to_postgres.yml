@@ -1,0 +1,39 @@
+---
+
+- name: Create tmp directory
+  shell: mktemp -d /tmp/riksdagens_data.XXXXXX
+  register: tmp_dir
+  delegate_to: "{{ ansible_management_host }}"
+
+- debug: var=tmp_dir
+
+- name: Download dataset catalogue
+  get_url: url={{ riksdagens_dataset_catalogue }} dest={{ tmp_dir.stdout }}
+  register: catalogue
+  delegate_to: "{{ ansible_management_host }}"
+
+- debug: var=catalogue
+
+- name: Extract dataset URLs
+  shell: grep -io '{{ riksdagens_dataset_pattern }}' {{ catalogue.dest }} | sort -u
+  register: dataset_urls
+  delegate_to: "{{ ansible_management_host }}"
+
+- debug: var=dataset_urls
+
+- name: Download datasets
+  get_url: url={{ item }} dest={{ tmp_dir.stdout }}
+  delegate_to: "{{ ansible_management_host }}"
+  with_items: "{{ dataset_urls.stdout_lines }}"
+
+- name: Uncompress datasets
+  unarchive: src={{ item }} dest={{ tmp_dir.stdout }}
+  delegate_to: "{{ ansible_management_host }}"
+  with_fileglob: "{{ tmp_dir.stdout/*.sql.zip }}"
+
+- find: paths={{ tmp_dir.stdout }}
+  delegate_to: "{{ ansible_management_host }}"
+
+- name: Cleanup temp data
+  file: path={{ tmp_dir.stdout }} state=absent
+  delegate_to: "{{ ansible_management_host }}"

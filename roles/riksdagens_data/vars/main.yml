@@ -1,2 +1,3 @@
 ---
 ansible_management_host: "{{ hostvars[groups['tag_Name_bastion'][0]].inventory_hostname }}"
+s3_data_bucket: data

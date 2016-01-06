@@ -5,3 +5,4 @@
   sudo: yes
   with_items:
   - python27-psycopg2
+  - python27-httplib2

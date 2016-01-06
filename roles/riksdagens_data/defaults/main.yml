@@ -5,3 +5,6 @@ db_password: riksdagen
 # TODO: there must be a better way. Facts? Vault?
 db_master_user: ChosenOne
 db_master_password: top_secret
+riksdagens_dataset_catalogue: 'http://data.riksdagen.se/Data/Dokument/'
+riksdagens_dataset_pattern: 'http://data\.riksdagen\.se.*\.sql\.zip'
+riksdagens_dataset_s3_key_prefix: riksdagen

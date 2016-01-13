@@ -1,0 +1,8 @@
+---
+
+- name: Create IAM role for EC2 instance
+  iam:
+    iam_type: role
+    name: "{{ iam_instance_profile_name }}"
+    region: "{{ ec2_region }}"
+    state: present

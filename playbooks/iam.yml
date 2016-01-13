@@ -1,0 +1,8 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+  - iam_instance_profile
+  - iam_s3_policy

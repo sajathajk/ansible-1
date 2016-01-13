@@ -1,0 +1,9 @@
+---
+
+- name: Create IAM policy to access S3 to the instance profile
+  iam_policy:
+    iam_type: role
+    iam_name: "{{ iam_instance_profile_name }}"
+    policy_name: "{{ iam_s3_policy_name }}"
+    policy_document: "{{ iam_s3_policy_document_path }}"
+    state: present

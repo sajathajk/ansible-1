@@ -5,3 +5,4 @@ ec2_group:
 - "{{ ec2_bastion_group_name }}"
 - rds_client_sg
 ec2_ami_id: ami-bff32ccc # Amazon Linux 2015.09.1 EU Ireland HVM (SSD) EBS-Backed 64-bit
+ec2_iam_instance_profile_name: my_ec2_instance_profile

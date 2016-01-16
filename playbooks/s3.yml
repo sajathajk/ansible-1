@@ -1,0 +1,10 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    s3_bucket_name: datawithoutborders
+  tasks:
+  - name: Create S3 bucket
+    s3: bucket={{ s3_bucket_name }} mode=create

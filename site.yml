@@ -1,5 +1,6 @@
 ---
 
+- include: playbooks/s3.yml
 - include: playbooks/iam.yml
 - include: playbooks/rds.yml
 - include: playbooks/bastion.yml

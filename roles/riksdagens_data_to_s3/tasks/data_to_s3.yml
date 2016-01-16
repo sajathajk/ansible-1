@@ -16,7 +16,9 @@
   register: dataset_urls
 
 - name: Download datasets
-  get_url: url={{ item | regex_replace(' ', '%20') }} dest={{ tmp_dir.stdout }}
+  get_url:
+    url: "{{ item | regex_replace(' ', '%20') }}"
+    dest: "{{ tmp_dir.stdout }}"
   with_items: "{{ dataset_urls.stdout_lines }}"
 
 - name: Upload datasets to S3

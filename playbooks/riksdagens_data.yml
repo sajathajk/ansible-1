@@ -3,7 +3,14 @@
   gather_facts: no
   roles:
   - ansible_manager
+
 - hosts: rds
   gather_facts: no
   roles:
-  - riksdagens_data
+  - riksdagens_database
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+  - riksdagens_data_to_s3

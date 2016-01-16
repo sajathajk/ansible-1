@@ -1,4 +1,4 @@
 ---
 - include: create_db.yml
 - include: create_db_user.yml
-- include: data_to_s3.yml
+- include: create_db_schema.yml

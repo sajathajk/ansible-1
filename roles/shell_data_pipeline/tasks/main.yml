@@ -7,7 +7,7 @@
 - debug: var=data_pipeline
 
 - name: Define the pipeline
-  command: aws datapipeline put-pipeline-definition --pipeline-id {{ data_pipeline.stdout }}  --pipeline-definition {{ pipeline_definition_uri }}
+  command: aws datapipeline put-pipeline-definition --pipeline-id {{ data_pipeline.stdout }}  --pipeline-definition {{ pipeline_definition_uri }} --parameter-values myS3InputLoc="{{ input_data_s3_path }}" myS3OutputLoc="{{ output_data_s3_path }}" myS3LogLoc="{{ logs_s3_path }}" myShellCmd="{{ transformation_shell_cmd }}"
 
 - name: Trigger the data pipeline
   command: aws datapipeline activate-pipeline --pipeline-id {{ data_pipeline.stdout }}

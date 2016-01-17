@@ -1,4 +1,4 @@
-CREATE TABLE dokument (
+CREATE TABLE riksdagens_data.dokument (
 hangar_id int,
 dok_id TEXT,
 rm TEXT,
@@ -11,9 +11,9 @@ organ TEXT,
 mottagare TEXT,
 nummer int,
 slutnummer int,
-datum datetime,
-systemdatum datetime,
-publicerad datetime,
+datum TIMESTAMP,
+systemdatum TIMESTAMP,
+publicerad TIMESTAMP,
 titel TEXT,
 subtitel TEXT,
 status TEXT,
@@ -25,11 +25,11 @@ dokument_url_text TEXT,
 dokument_url_html TEXT,
 dokumentstatus_url_xml TEXT,
 utskottsforslag_url_xml TEXT,
-html ntext
+html TEXT
 );
 
  
-CREATE TABLE dokutskottsforslag (
+CREATE TABLE riksdagens_data.dokutskottsforslag (
 rm TEXT,
 bet TEXT,
 punkt int,
@@ -48,7 +48,7 @@ vinnare TEXT
 );
 
  
-CREATE TABLE dokmotforslag (
+CREATE TABLE riksdagens_data.dokmotforslag (
 nummer int,
 rubrik TEXT,
 forslag TEXT,
@@ -59,18 +59,18 @@ id TEXT
 );
 
  
-CREATE TABLE dokaktivitet (
+CREATE TABLE riksdagens_data.dokaktivitet (
 hangar_id int,
 kod TEXT,
 namn TEXT,
-datum datetime,
+datum TIMESTAMP,
 status TEXT,
 ordning TEXT,
 process TEXT
 );
 
  
-CREATE TABLE dokintressent (
+CREATE TABLE riksdagens_data.dokintressent (
 hangar_id int,
 intressent_id TEXT,
 namn TEXT,
@@ -80,7 +80,7 @@ roll TEXT
 );
 
  
-CREATE TABLE dokforslag (
+CREATE TABLE riksdagens_data.dokforslag (
 hangar_id int,
 nummer int,
 beteckning TEXT,
@@ -94,15 +94,15 @@ kammarbeslutstyp TEXT
  
  
  
-CREATE TABLE dokuppgift (
+CREATE TABLE riksdagens_data.dokuppgift (
 hangar_id int,
 kod TEXT,
 namn TEXT,
-text ntext
+text TEXT
 );
 
  
-CREATE TABLE dokbilaga (
+CREATE TABLE riksdagens_data.dokbilaga (
 hangar_id int,
 dok_id TEXT,
 titel TEXT,
@@ -114,7 +114,7 @@ fil_url TEXT
 );
 
  
-CREATE TABLE dokreferens (
+CREATE TABLE riksdagens_data.dokreferens (
 hangar_id int,
 referenstyp TEXT,
 uppgift TEXT,
@@ -127,7 +127,7 @@ ref_dok_subtitel TEXT
 );
 
  
-CREATE TABLE debatt (
+CREATE TABLE riksdagens_data.debatt (
 hangar_id int,
 video_id TEXT,
 video_url TEXT,
@@ -136,9 +136,9 @@ anf_video_id TEXT,
 anf_hangar_id int,
 anf_sekunder int,
 anf_klockslag TEXT,
-datumtid datetime,
+datumtid TIMESTAMP,
 talare TEXT,
-anf_datum datetime,
+anf_datum TIMESTAMP,
 anf_typ TEXT,
 anf_text TEXT,
 anf_beteckning TEXT,
@@ -150,7 +150,7 @@ anf_rm TEXT
 
  
  
-CREATE TABLE votering (
+CREATE TABLE riksdagens_data.votering (
 rm TEXT, 
 beteckning TEXT,
 hangar_id int,
@@ -170,19 +170,19 @@ fornamn TEXT,
 efternamn TEXT,
 kon TEXT,
 fodd int,
-datum datetime
+datum TIMESTAMP
 );
 
 
 
-CREATE TABLE anforande (
+CREATE TABLE riksdagens_data.anforande (
 pk int,
 dok_id TEXT,
 dok_titel TEXT,
 dok_hangar_id int,
 dok_rm TEXT,
 dok_nummer int,
-dok_datum datetime,
+dok_datum TIMESTAMP,
 avsnittsrubrik TEXT,
 kammaraktivitet TEXT,
 justerat TEXT,
@@ -191,11 +191,11 @@ anf_nummer int,
 talare TEXT,
 rel_dok_id TEXT,
 parti TEXT,
-lydelse ntext,
+lydelse TEXT,
 intressent_id TEXT,
 intressent_hangar_id int,
 replik TEXT,
-systemdatum datetime,
+systemdatum TIMESTAMP,
 källa TEXT,
 anf_hangar_id int,
 rel_dok_hangar_id int
@@ -203,14 +203,14 @@ rel_dok_hangar_id int
 
 
 
-CREATE TABLE person (
+CREATE TABLE riksdagens_data.person (
 id int,
 hangar_id int,
 intressent_id TEXT,
 kontrollsumma TEXT,
 född_år smallint,
-född datetime,
-avliden datetime,
+född TIMESTAMP,
+avliden TIMESTAMP,
 kön TEXT,
 förnamn TEXT,
 efternamn TEXT,
@@ -225,14 +225,14 @@ status TEXT,
 källa TEXT,
 källa_id TEXT,
 statsråd TEXT,
-timestamp datetime,
+timestamp TIMESTAMP,
 personid int
 );
 
 
 
 
-CREATE TABLE personuppdrag (
+CREATE TABLE riksdagens_data.personuppdrag (
 id int,
 organ_kod TEXT,
 hangar_id int,
@@ -241,8 +241,8 @@ ordningsnummer int,
 roll_kod TEXT,
 status TEXT,
 typ TEXT,
-[from] datetime,
-tom datetime,
+"from" TIMESTAMP,
+tom TIMESTAMP,
 källa TEXT,
 källa_id TEXT,
 uppgift TEXT
@@ -250,12 +250,12 @@ uppgift TEXT
 
 
 
-CREATE TABLE personuppgift (
+CREATE TABLE riksdagens_data.personuppgift (
 id int,
 hangar_id int,
 intressent_id TEXT,
 uppgift_kod TEXT,
-uppgift ntext,
+uppgift TEXT,
 källa TEXT,
 källa_id TEXT,
 uppgift_typ TEXT
@@ -263,7 +263,7 @@ uppgift_typ TEXT
 
 
 
-CREATE TABLE planering (
+CREATE TABLE riksdagens_data.planering (
 nyckel int,
 id TEXT,
 rm TEXT,
@@ -275,26 +275,26 @@ tempbet TEXT,
 intressent TEXT,
 nummer int,
 slutnummer int,
-datum datetime,
-publicerad datetime,
+datum TIMESTAMP,
+publicerad TIMESTAMP,
 status TEXT,
 titel TEXT,
 subtitel TEXT,
-html ntext,
-toc ntext,
+html TEXT,
+toc TEXT,
 refcss TEXT,
 url TEXT,
-uppdaterad datetime,
+uppdaterad TIMESTAMP,
 storlek int,
 source TEXT,
-wn_expires datetime,
+wn_expires TIMESTAMP,
 wn_cachekey TEXT,
 wn_status TEXT,
 wn_checksum TEXT,
 wn_nid int,
 wn_RawUrl TEXT,
 wn_SourceID TEXT,
-timestamp datetime,
+timestamp TIMESTAMP,
 rel_id TEXT,
 klockslag TEXT,
 grupp TEXT,
@@ -304,13 +304,13 @@ mottagare_id TEXT,
 mottagare TEXT,
 hangar_id int,
 plats TEXT,
-slutdatum datetime,
-webbtvlive tinyint
+slutdatum TIMESTAMP,
+webbtvlive SMALLINT
 );
 
 
 
-CREATE TABLE organ (
+CREATE TABLE riksdagens_data.organ (
 id int,
 kod TEXT,
 namn TEXT,
@@ -324,7 +324,7 @@ beskrivning TEXT
 
 
 
-CREATE TABLE roll (
+CREATE TABLE riksdagens_data.roll (
 pk int,
 kod TEXT,
 namn TEXT,
@@ -333,11 +333,11 @@ sort int
 
 
 
-CREATE TABLE riksmote (
+CREATE TABLE riksdagens_data.riksmote (
 pk int,
 riksmote TEXT,
 id TEXT,
-start datetime,
-slut datetime,
+start TIMESTAMP,
+slut TIMESTAMP,
 mandatperiod TEXT
 );

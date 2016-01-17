@@ -8,10 +8,6 @@
 - block:
   - name: Create database schema
     shell: PGPASSWORD={{ db_master_password }} psql -t -h {{ rds_host }} -U {{ db_master_user }}  -d {{ db_name }} -c "CREATE SCHEMA {{ db_schema_name }}; ALTER USER {{ db_user }} SET search_path TO {{ db_schema_name }}, public;"
-  - name: Grant access to schema
-    postgresql_privs: host={{ rds_host }} login={{ db_master_user }} password={{ db_master_password }} database={{ db_name }} type=schema objs={{ db_schema_name }} roles={{ db_user }} privs=USAGE
-  - name: Grant access to tables of the schema
-    postgresql_privs: host={{ rds_host }} login={{ db_master_user }} password={{ db_master_password }} database={{ db_name }} schema={{ db_schema_name }} type=table objs=ALL_IN_SCHEMA roles={{ db_user }} privs=SELECT
   - name: Create tmp directory
     shell: mktemp -d /tmp/riksdagens_data.XXXXXX
     register: tmp_dir
@@ -21,4 +17,8 @@
     shell: cat {{ tmp_dir.stdout}}/db_schema.sql | PGPASSWORD={{ db_master_password }} psql -h {{ rds_host }} -U {{ db_master_user }}  -d {{ db_name }}
   - name: Cleanup temp data
     file: path={{ tmp_dir.stdout }} state=absent
+  - name: Grant access to schema
+    postgresql_privs: host={{ rds_host }} login={{ db_master_user }} password={{ db_master_password }} database={{ db_name }} type=schema objs={{ db_schema_name }} roles={{ db_user }} privs=USAGE
+  - name: Grant access to tables of the schema
+    postgresql_privs: host={{ rds_host }} login={{ db_master_user }} password={{ db_master_password }} database={{ db_name }} schema={{ db_schema_name }} type=table objs=ALL_IN_SCHEMA roles={{ db_user }} privs=SELECT
   when: check_schema.changed

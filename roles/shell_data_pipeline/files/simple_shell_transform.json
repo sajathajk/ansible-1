@@ -65,7 +65,11 @@
       "role": "DataPipelineDefaultRole",
       "imageId": "ami-bff32ccc",
       "instanceType": "t2.micro",
-      "name": "default_ec2_micro",
+      "securityGroups" : [
+        "rds_client_sg"
+      ],
+      "keypair": "ansible_ec2",
+      "name": "my_ec2_micro",
       "id": "ResourceId_bqN7p",
       "type": "Ec2Resource",
       "terminateAfter": "30 Minutes"
@@ -73,25 +77,21 @@
   ],
   "parameters": [
     {
-      "default": "s3://datawithoutborders/tmp/riksdagen",
       "description": "S3 output data folder",
       "id": "myS3OutputLoc",
       "type": "AWS::S3::ObjectKey"
     },
     {
-      "default": "s3://datawithoutborders/data/riksdagen",
       "description": "S3 input data folder",
       "id": "myS3InputLoc",
       "type": "AWS::S3::ObjectKey"
     },
     {
-      "default": "s3://datawithoutborders/logs/data-pipelines",
       "description": "S3 log folder",
       "id": "myS3LogLoc",
       "type": "AWS::S3::ObjectKey"
     },
     {
-      "default": "unzip '${INPUT1_STAGING_DIR}/*' -d ${OUTPUT1_STAGING_DIR}",
       "description": "Shell command to run",
       "id": "myShellCmd",
       "type": "String"

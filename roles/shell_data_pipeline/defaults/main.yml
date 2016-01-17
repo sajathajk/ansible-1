@@ -1,0 +1,7 @@
+---
+pipeline_name: riksdagens_data_s3_to_rds
+pipeline_id: "{{ pipeline_name }}"
+input_data_s3_path: s3://datawithoutborders/data/riksdagen
+output_data_s3_path: s3://datawithoutborders/tmp/riksdagen
+transformation_shell_cmd: unzip '${INPUT1_STAGING_DIR}/*' -d ${OUTPUT1_STAGING_DIR}
+

@@ -1,0 +1,16 @@
+---
+
+- name: Create data pipeline
+  shell: aws datapipeline create-pipeline --name {{ pipeline_name }} --unique-id {{ pipeline_id }} | awk '{print $2}'
+  register: data_pipeline
+
+- debug: var=data_pipeline
+
+- name: Define the pipeline
+  command: aws datapipeline put-pipeline-definition --pipeline-id {{ data_pipeline.stdout }}  --pipeline-definition {{ pipeline_definition_uri }}
+
+- name: Trigger the data pipeline
+  command: aws datapipeline activate-pipeline --pipeline-id {{ data_pipeline.stdout }}
+
+#- name: Destroy the data pipeline
+#  command: aws datapipeline delete-pipeline --pipeline-id  df-07571822GVH9Q2XFYHXF

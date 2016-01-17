@@ -20,7 +20,7 @@
     backup_retention: "{{ rds_backup_retention_days }}"
     backup_window: "{{ rds_backup_window }}"
     wait: yes
-    wait_timeout: 600
+    wait_timeout: 900
     tags:
       Environment: "{{ ec2_tag_Environment }}"
       Name: "{{ rds_instance_name }}"

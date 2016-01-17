@@ -5,3 +5,4 @@ db_password: riksdagen
 # TODO: there must be a better way. Facts? Vault?
 db_master_user: ChosenOne
 db_master_password: top_secret
+db_schema_name: "{{ db_name }}"

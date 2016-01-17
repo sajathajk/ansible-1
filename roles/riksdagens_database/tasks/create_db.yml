@@ -2,8 +2,9 @@
 - name: Create database
   postgresql_db:
     name: "{{ db_name }}"
-    login_host: "{{ inventory_hostname }}"
+    #login_host: "{{ inventory_hostname }}"
+    login_host: "{{ rds_host }}"
     login_user: "{{ db_master_user }}"
     login_password: "{{ db_master_password }}"
-  delegate_to: "{{ ansible_management_host }}"
+  #delegate_to: "{{ ansible_management_host }}"
   register: riksdagen_db

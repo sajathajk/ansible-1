@@ -2,12 +2,13 @@
 - name: Create database user
   postgresql_user:
     db: "{{ db_name }}"
-    login_host: "{{ inventory_hostname }}"
+    #login_host: "{{ inventory_hostname }}"
+    login_host: "{{ rds_host }}"
     login_user: "{{ db_master_user }}"
     login_password: "{{ db_master_password }}"
     name: "{{ db_user }}"
     password: "{{ db_password }}"
     # This would work in Ansible 2.0, see https://github.com/ansible/ansible-modules-core/issues/297
     # no_password_changes: yes
-  delegate_to: "{{ ansible_management_host }}"
+  #delegate_to: "{{ ansible_management_host }}"
   when: riksdagen_db.changed

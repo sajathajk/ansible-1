@@ -68,7 +68,7 @@
       "securityGroups" : [
         "rds_client_sg"
       ],
-      "keypair": "ansible_ec2",
+      "keyPair": "ansible_ec2",
       "name": "my_ec2_micro",
       "id": "ResourceId_bqN7p",
       "type": "Ec2Resource",

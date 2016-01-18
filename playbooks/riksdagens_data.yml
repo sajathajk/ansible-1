@@ -10,16 +10,18 @@
   roles:
   - riksdagens_database
 
-#- hosts: localhost
-#  connection: local
-#  gather_facts: no
-#  roles:
-#  - riksdagens_data_to_s3
-#  - role: shell_data_pipeline
-#    pipeline_name: riksdagens_data_s3_to_rds
-#    pipeline_id: "{{ pipeline_name }}"
-#    input_data_s3_path: s3://datawithoutborders/data/tmp
-#    output_data_s3_path: s3://datawithoutborders/tmp/riksdagen
-#    transformation_shell_cmd: sudo yum install -y postgresql && unzip  -p ${INPUT1_STAGING_DIR}/* | PGPASSWORD=riksdagen psql -U riksdagen
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    rds_host: "{{ hostvars[groups['vault13'][0]].inventory_hostname }}"
+  roles:
+  - riksdagens_data_to_s3
+  - role: shell_data_pipeline
+    pipeline_name: riksdagens_data_s3_to_rds
+    pipeline_id: "{{ pipeline_name }}"
+    input_data_s3_path: s3://datawithoutborders/data/tmp
+    output_data_s3_path: s3://datawithoutborders/tmp/riksdagen
+    transformation_shell_cmd: sudo yum install -y postgresql94 && for i in ${INPUT1_STAGING_DIR}/*.sql.zip; do unzip -p $i; done | PGPASSWORD=riksdagen psql -U riksdagen -h {{ rds_host }} riksdagens_data
 
 # echo "SELECT 1" | PGPASSWORD=top_secret psql -U ChosenOne -h vault13.ceoyhimtb9ex.eu-west-1.rds.amazonaws.com riksdagen

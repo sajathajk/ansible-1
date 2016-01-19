@@ -71,8 +71,7 @@
       "keyPair": "ansible_ec2",
       "name": "my_ec2_micro",
       "id": "ResourceId_bqN7p",
-      "type": "Ec2Resource",
-      "terminateAfter": "30 Minutes"
+      "type": "Ec2Resource"
     }
   ],
   "parameters": [

@@ -6,7 +6,9 @@ beteckning TEXT,
 doktyp TEXT,
 typ TEXT,
 subtyp TEXT,
+debattnamn TEXT,
 tempbeteckning TEXT,
+pretext TEXT,
 organ TEXT,
 mottagare TEXT,
 nummer int,
@@ -30,6 +32,7 @@ html TEXT
 
  
 CREATE TABLE riksdagens_data.dokutskottsforslag (
+hangar_id int,
 rm TEXT,
 bet TEXT,
 punkt int,
@@ -49,6 +52,7 @@ vinnare TEXT
 
  
 CREATE TABLE riksdagens_data.dokmotforslag (
+hangar_id int,
 nummer int,
 rubrik TEXT,
 forslag TEXT,
@@ -96,6 +100,7 @@ kammarbeslutstyp TEXT
  
 CREATE TABLE riksdagens_data.dokuppgift (
 hangar_id int,
+dok_id TEXT,
 kod TEXT,
 namn TEXT,
 text TEXT
@@ -120,6 +125,7 @@ referenstyp TEXT,
 uppgift TEXT,
 ref_dok_id TEXT,
 ref_dok_typ TEXT,
+ref_dok_subtyp TEXT,
 ref_dok_rm TEXT,
 ref_dok_bet TEXT,
 ref_dok_titel TEXT,

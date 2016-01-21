@@ -2,8 +2,6 @@
 
 - include: playbooks/s3.yml
 - include: playbooks/iam.yml
-- include: playbooks/rds.yml
-- include: playbooks/bastion.yml
 - include: playbooks/riksdagens_data.yml
 - include: playbooks/riksdagens_data_to_s3.yml
 - include: playbooks/riksdagens_data_to_rds.yml

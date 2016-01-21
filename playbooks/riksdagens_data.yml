@@ -1,11 +1,20 @@
 ---
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+  - { role: rds_pg, rds_size_gb: 20 }
+  - ec2_keypair
+  - ec2_bastion
+
+#- hosts: all
+#  gather_facts: no
+#  tasks:
+#  - meta: refresh_inventory
+
 - hosts: tag_Name_bastion
   gather_facts: no
   roles:
   - ansible_manager
-
-#- hosts: rds
-- hosts: tag_Name_bastion
-  gather_facts: no
-  roles:
   - riksdagens_database

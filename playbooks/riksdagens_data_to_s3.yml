@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+  - role: shell_data_pipeline
+    pipeline_name: riksdagens_data_to_s3
+    pipeline_id: "{{ pipeline_name }}"
+    input_data_s3_path: s3://datawithoutborders/tmp/riksdagen
+    output_data_s3_path: s3://datawithoutborders/tmp/riksdagen
+    transformation_shell_cmd: cd ${OUTPUT1_STAGING_DIR} && curl -sS "http://data.riksdagen.se/Data/{Anforanden,Ledamoter,Voteringar,Dokument}/" | grep -io 'http://data\\\\.riksdagen\\\\.se.*\\\\.sql\\\\.zip' | sed 's/ /%20/' | while read i; do echo "$i" && curl -O "$i" ; done

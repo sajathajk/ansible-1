@@ -4,4 +4,4 @@
   connection: local
   gather_facts: no
   roles:
-  - rds_pg
+  - { role: rds_pg, rds_size_gb: 20 }

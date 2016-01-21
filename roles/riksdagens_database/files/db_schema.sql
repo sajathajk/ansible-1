@@ -9,6 +9,7 @@ subtyp TEXT,
 debattnamn TEXT,
 tempbeteckning TEXT,
 pretext TEXT,
+rubriker TEXT,
 organ TEXT,
 mottagare TEXT,
 nummer int,
@@ -27,7 +28,9 @@ dokument_url_text TEXT,
 dokument_url_html TEXT,
 dokumentstatus_url_xml TEXT,
 utskottsforslag_url_xml TEXT,
-html TEXT
+html TEXT,
+images TEXT,
+"text" TEXT
 );
 
  
@@ -93,7 +96,9 @@ lydelse2 TEXT,
 utskottet TEXT,
 kammaren TEXT,
 behandlas_i TEXT,
-kammarbeslutstyp TEXT
+behandlas_i_punkt TEXT,
+kammarbeslutstyp TEXT,
+intressent TEXT
 );
  
  
@@ -103,7 +108,8 @@ hangar_id int,
 dok_id TEXT,
 kod TEXT,
 namn TEXT,
-text TEXT
+text TEXT,
+systemdatum TIMESTAMP
 );
 
  
@@ -192,12 +198,13 @@ dok_datum TIMESTAMP,
 avsnittsrubrik TEXT,
 kammaraktivitet TEXT,
 justerat TEXT,
-anf_id TEXT,
-anf_nummer int,
+anforande_id TEXT,
+anforande_nummer int,
 talare TEXT,
 rel_dok_id TEXT,
 parti TEXT,
 lydelse TEXT,
+anforandetext TEXT,
 intressent_id TEXT,
 intressent_hangar_id int,
 replik TEXT,

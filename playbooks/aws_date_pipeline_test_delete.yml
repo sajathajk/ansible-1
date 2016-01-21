@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+  - name: The Fish follows the Flow
+    aws_data_pipeline:
+      name: "{{ item }}"
+      state: absent
+    with_items:
+    - my-big-data-pipeline
+    - my-event-pipeline
+  - name: The Fish follows the Flow
+    aws_data_pipeline:
+      pipeline_id: df-0264076XCNVB3K7HLWR
+      state: absent

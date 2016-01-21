@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+  - name: Big Fish swims in the Data Lake
+    aws_data_pipeline:
+      name: my-big-data-pipeline
+      unique_id: my-unique-pipeline-name
+      state: present

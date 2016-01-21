@@ -7,4 +7,4 @@
     aws_data_pipeline:
       name: my-big-data-pipeline
       unique_id: my-unique-pipeline-name
-      state: present
+      region: "{{ ec2_region }}"

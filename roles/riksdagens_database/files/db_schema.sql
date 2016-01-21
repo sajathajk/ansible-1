@@ -50,6 +50,7 @@ motforslag_partier TEXT,
 votering_id TEXT,
 votering_sammanfattning_html TEXT,
 votering_ledamot_url_xml TEXT,
+votering_url_xml TEXT,
 vinnare TEXT
 );
 
@@ -98,7 +99,8 @@ kammaren TEXT,
 behandlas_i TEXT,
 behandlas_i_punkt TEXT,
 kammarbeslutstyp TEXT,
-intressent TEXT
+intressent TEXT,
+avsnitt TEXT
 );
  
  
@@ -143,6 +145,7 @@ CREATE TABLE riksdagens_data.debatt (
 hangar_id int,
 video_id TEXT,
 video_url TEXT,
+startpos TEXT,
 tumnagel TEXT,
 anf_video_id TEXT,
 anf_hangar_id int,
@@ -196,6 +199,7 @@ dok_rm TEXT,
 dok_nummer int,
 dok_datum TIMESTAMP,
 avsnittsrubrik TEXT,
+underrubrik TEXT,
 kammaraktivitet TEXT,
 justerat TEXT,
 anforande_id TEXT,

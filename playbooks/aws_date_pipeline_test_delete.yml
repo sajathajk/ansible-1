@@ -4,7 +4,7 @@
   gather_facts: no
   tasks:
   - name: The Fish follows the Flow
-    aws_data_pipeline:
+    data_pipeline:
       name: "{{ item }}"
       region: "{{ ec2_region }}"
       state: absent

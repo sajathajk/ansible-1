@@ -4,7 +4,17 @@
   gather_facts: no
   tasks:
   - name: Big Fish swims in the Data Lake
-    aws_data_pipeline:
+    data_pipeline:
       name: my-big-data-pipeline
       unique_id: my-unique-pipeline-name
       region: "{{ ec2_region }}"
+    register: new_pipeline
+  - name: It has a funny shape
+    data_pipeline_definition:
+      pipeline_id: "{{ new_pipeline.pipeline_id }}"
+      definition: roles/shell_data_pipeline/files/simple_shell_transform.json
+      parameters:
+        myS3InputLoc: s3://datawithoutborders/tmp/riksdagen
+        myS3OutputLoc: s3://datawithoutborders/tmp/riksdagen
+        myS3LogLoc: s3://datawithoutborders/logs/data-pipelines
+        myShellCmd: cd ${OUTPUT1_STAGING_DIR} && curl -sS "http://data.riksdagen.se/Data/Ledamoter/" | grep -io 'http://data\\\\.riksdagen\\\\.se.*\\\\.sql\\\\.zip' | sed 's/ /%20/' | while read i; do echo "$i" && curl -O "$i" ; done

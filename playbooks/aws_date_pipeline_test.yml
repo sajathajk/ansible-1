@@ -18,3 +18,7 @@
         myS3OutputLoc: s3://datawithoutborders/tmp/riksdagen
         myS3LogLoc: s3://datawithoutborders/logs/data-pipelines
         myShellCmd: cd ${OUTPUT1_STAGING_DIR} && curl -sS "http://data.riksdagen.se/Data/Ledamoter/" | grep -io 'http://data\\\\.riksdagen\\\\.se.*\\\\.sql\\\\.zip' | sed 's/ /%20/' | while read i; do echo "$i" && curl -O "$i" ; done
+  - name: It's alive!
+    data_pipeline:
+      pipeline_id: "{{ new_pipeline.pipeline_id }}"
+      state: active

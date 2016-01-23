@@ -16,10 +16,10 @@
 DOCUMENTATION = '''
 ---
 module: data_pipeline
-short_description: Manage AWS Data Pipeline
+short_description: Manage AWS Data Pipelines
 requirements: [ boto ]
 description:
-     - Allows creating or removing AWS Data Pipelines.
+     - Allows creating or removing AWS Data Pipelines. Previously created pipelines can be activated or deactivated.
 version_added: "2.0"
 options:
   name:
@@ -28,21 +28,26 @@ options:
     required: false
   unique_id:
     description:
-      - A unique identifier, mandatory if state is 'present'. This identifier is not the same as the pipeline_id which is assigned by AWS Data Pipeline. You are responsible for defining the format and ensuring the uniqueness of this identifier. Used to ensure idempotency during repeated calls to the module.
+      - A unique identifier, only used if state is 'present'. This identifier is not the same as the pipeline_id which is assigned by AWS Data Pipeline. You are responsible for defining the format and ensuring the uniqueness of this identifier. Used to ensure idempotency during repeated calls to the module.
     required: false
   pipeline_id:
     description:
-      - A unique identifier which is assigned by AWS when the pipeline is created. In this module it must only be used when state is 'absent' to specify the pipeline to delete. Either 'unique_id' or 'name' should be defined when state is 'absent'
+      - A unique identifier which is assigned by AWS when the pipeline is created. In this module it can be used when state is 'absent' or 'active' to specify the pipeline to work with. Either 'unique_id' or 'name' can be used when state is 'absent'
     required: false
   state:
     description:
-      - Create or delete the pipeline.
+      - Create, activate, deactivate or delete the pipeline.
     default: 'present'
     required: false
-    choices: ['present', 'absent']
+    choices: ['present', 'active', 'inactive', 'absent']
   description:
     description:
-      - The description of the new pipeline.
+      - The description of the new pipeline. Only used with state 'active' when creating a new pipeline.
+  parameters:
+    description:
+      - A hash of all the parameter values used when activating the pipeline. This overrides parameters from the pipeline definition.
+    required: false
+    default: {}
 extends_documentation_fragment:
     - aws
 '''
@@ -68,11 +73,23 @@ task:
 '''
 try:
     import boto
-    import boto.datapipeline
-    import boto.datapipeline.layer1
     HAS_BOTO = True
 except ImportError:
     HAS_BOTO = False
+
+try:
+    import boto3
+    import boto3.datapipeline
+    import boto3.datapipeline.layer1
+    HAS_BOTO3 = True
+except ImportError:
+    HAS_BOTO3 = False
+
+try:
+    from awscli.customizations.datapipeline import translator
+    HAS_AWS_CLI = True
+except ImportError:
+    HAS_AWS_CLI = False
 
 
 def boto_exception(err):
@@ -88,26 +105,45 @@ def boto_exception(err):
 
 
 def delete_pipeline(module, dp, pipeline_id):
-    changed = False
     try:
-        dp.delete_pipeline(pipeline_id)
-        changed = True
+        dp.delete_pipeline(pipelineId=pipeline_id)
     except boto.exception.BotoServerError, err:
-        module.fail_json(changed=changed, msg=boto_exception(err))
+        module.fail_json(changed=False, msg=boto_exception(err))
     else:
-        return changed
+        return True
 
 
 def create_pipeline(module, dp, name, unique_id, description=None):
-    changed = False
     try:
-        res = dp.create_pipeline(name, unique_id, description)
-        changed = True
+        req = dict(name=name, uniqueId=unique_id,)
+        if description is not None:
+            req['description'] = description
+        res = dp.create_pipeline(**req)
     except boto.exception.BotoServerError, err:
-        module.fail_json(changed=changed, msg=boto_exception(err))
+        module.fail_json(changed=False, msg=boto_exception(err))
     else:
-        pipeline_id = res['pipelineId']
-        return changed, pipeline_id
+        return True, res['pipelineId']
+
+
+def activate_pipeline(module, dp, pipeline_id, parameters):
+    try:
+        req = dict(pipelineId=pipeline_id)
+        if parameters is not None:
+            req['parameterValues'] = translator.definition_to_parameter_values({'values': parameters})
+        dp.activate_pipeline(**req)
+    except boto.exception.BotoServerError, err:
+        module.fail_json(changed=False, msg=boto_exception(err))
+    else:
+        return True
+
+
+def deactivate_pipeline(module, dp, pipeline_id):
+    try:
+        dp.deactivate_pipeline(pipelineId=pipeline_id)
+    except boto.exception.BotoServerError, err:
+        module.fail_json(changed=False, msg=boto_exception(err))
+    else:
+        return True
 
 
 def get_all_pipelines(dp):
@@ -127,21 +163,29 @@ def main():
             pipeline_id=dict(default=None, required=False),
             unique_id=dict(default=None, required=False),
             description=dict(default=None, required=False),
-            state=dict(default='present', choices=['present', 'absent'])
+            state=dict(default='present', choices=['present', 'active', 'inactive', 'absent']),
+            parameters=dict(default=None, required=False)
     ))
 
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=[['name', 'pipeline_id']],
+        mutually_exclusive=[['name', 'pipeline_id'], ['description', 'pipeline_id']],
     )
 
     if not HAS_BOTO:
-        module.fail_json(msg='This module requires boto, please install it')
+        module.fail_json(msg='This module requires Boto, please install it')
+
+    if not HAS_BOTO3:
+        module.fail_json(msg='This module requires Boto3, please install it')
+
+    if not HAS_AWS_CLI:
+        module.fail_json(msg='This module requires awscli, please install it')
 
     name = module.params.get('name')
     unique_id = module.params.get('unique_id')
     pipeline_id = module.params.get('pipeline_id')
     state = module.params.get('state').lower()
+    activation_parameters = module.params.get('parameters')
 
     changed = False
 
@@ -150,19 +194,19 @@ def main():
             module.fail_json(changed=False, msg="data_pipeline: name must be defined when creating a pipeline")
         elif unique_id is None:
             module.fail_json(changed=False, msg="data_pipeline: unique_id must be defined when creating a pipeline")
-    if state == 'absent':
+    elif state == 'absent':
         if unique_id is not None:
             module.fail_json(changed=False, msg="data_pipeline: when deleting an existing pipeline either name or pipeline_id should be used but not unique_id")
         elif name is None and pipeline_id is None:
             module.fail_json(changed=False, msg="data_pipeline: when deleting an existing pipeline either name or pipeline_id should be used")
+    elif state == 'active' or state == 'inactive':
+        if pipeline_id is None:
+            module.fail_json(changed=False, msg="data_pipeline: unique_id must be defined when activating or deactivating a pipeline")
 
-    region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module)
+    region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module, boto3=True)
 
     try:
-        if region:
-            dp = boto.datapipeline.connect_to_region(region, **aws_connect_kwargs)
-        else:
-            dp = boto.datapipeline.layer1.DataPipelineConnection(**aws_connect_kwargs)
+        dp = boto3_conn(module, conn_type='client', resource='datapipeline', region=region, endpoint=ec2_url, **aws_connect_kwargs)
     except boto.exception.NoAuthHandlerFound, e:
         module.fail_json(msg=boto_exception(e))
         return
@@ -189,8 +233,12 @@ def main():
         description = module.params.get('description')
         changed, pipeline_id = create_pipeline(module, dp, name, unique_id, description)
         changed = changed and pipeline_id not in existing_pipeline_ids
-        module.exit_json(changed=changed, pipeline_id=pipeline_id)
+    elif state == 'active' and pipeline_id in existing_pipeline_ids:
+        changed = activate_pipeline(module, dp, pipeline_id, activation_parameters)
+    elif state == 'inactive' and pipeline_id in existing_pipeline_ids:
+        changed = deactivate_pipeline(module, dp, pipeline_id)
 
+    module.exit_json(changed=changed, pipeline_id=pipeline_id)
 
 from ansible.module_utils.basic import *
 from ansible.module_utils.ec2 import *

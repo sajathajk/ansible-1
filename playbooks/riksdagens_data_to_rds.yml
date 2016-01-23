@@ -10,4 +10,4 @@
     pipeline_id: "{{ pipeline_name }}"
     input_data_s3_path: s3://datawithoutborders/data/riksdagen
     output_data_s3_path: s3://datawithoutborders/data/tmp
-    transformation_shell_cmd: sudo yum install -y postgresql94 && for i in ${INPUT1_STAGING_DIR}/*.sql.zip; do unzip -p $i; done | sed 's/\\\\xEF\\\\xBB\\\\xBF//' | PGPASSWORD=riksdagen psql -U riksdagen -h {{ rds_host }} riksdagens_data
+    transformation_shell_cmd: sudo yum install -y postgresql94 && for i in ${INPUT1_STAGING_DIR}/*.sql.zip; do unzip -p $i; done | sed 's/\\\\xEF\\\\xBB\\\\xBF//' | sed 's/\\\\[from\\\\]/"from"/' | sed 's/,,/,NULL,/g' | sed 's/,,/,NULL,/g' | PGPASSWORD=riksdagen psql -U riksdagen -h {{ rds_host }} riksdagens_data

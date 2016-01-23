@@ -15,8 +15,9 @@
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 DOCUMENTATION = '''
 ---
-module: aws_data_pipeline
+module: data_pipeline
 short_description: Manage AWS Data Pipeline
+requirements: [ boto ]
 description:
      - Allows creating or removing AWS Data Pipelines.
 version_added: "2.0"
@@ -50,7 +51,7 @@ EXAMPLES = '''
 # Create an AWS Data Pipeline with the name of 'my-big-data-pipeline' and unique id 'my-unique-pipeline-name'.
 tasks:
 - name: Big Fish swims in the Data Lake
-  aws_data_pipeline:
+  data_pipeline:
     name: my-big-data-pipeline
     unique_id: my-unique-pipeline-name
     state: present
@@ -58,7 +59,7 @@ tasks:
 # A reverse action that removes previously created pipelines 'my-big-data-pipeline' and 'my-event-pipeline'
 task:
 - name: The Fish follows the Flow
-  aws_data_pipeline:
+  data_pipeline:
     name: "{{ item }}"
     state: absent
   with_items:
@@ -72,6 +73,7 @@ try:
     HAS_BOTO = True
 except ImportError:
     HAS_BOTO = False
+
 
 def boto_exception(err):
     '''generic error message handler'''
@@ -91,7 +93,7 @@ def delete_pipeline(module, dp, pipeline_id):
         dp.delete_pipeline(pipeline_id)
         changed = True
     except boto.exception.BotoServerError, err:
-        module.fail_json(changed=changed, msg=str(err))
+        module.fail_json(changed=changed, msg=boto_exception(err))
     else:
         return changed
 
@@ -102,7 +104,7 @@ def create_pipeline(module, dp, name, unique_id, description=None):
         res = dp.create_pipeline(name, unique_id, description)
         changed = True
     except boto.exception.BotoServerError, err:
-        module.fail_json(changed=changed, msg=str(err))
+        module.fail_json(changed=changed, msg=boto_exception(err))
     else:
         pipeline_id = res['pipelineId']
         return changed, pipeline_id
@@ -129,7 +131,8 @@ def main():
     ))
 
     module = AnsibleModule(
-            argument_spec=argument_spec,
+        argument_spec=argument_spec,
+        mutually_exclusive=[['name', 'pipeline_id']],
     )
 
     if not HAS_BOTO:
@@ -143,17 +146,15 @@ def main():
     changed = False
 
     if state == 'present':
-        if unique_id is None:
-            module.fail_json(changed=False, msg="aws_data_pipeline: unique_id must be defined when creating a pipeline")
-        elif pipeline_id is not None:
-            module.fail_json(changed=False, msg="aws_data_pipeline: pipeline_id must only be used when deleting an existing pipeline")
+        if name is None:
+            module.fail_json(changed=False, msg="data_pipeline: name must be defined when creating a pipeline")
+        elif unique_id is None:
+            module.fail_json(changed=False, msg="data_pipeline: unique_id must be defined when creating a pipeline")
     if state == 'absent':
         if unique_id is not None:
-            module.fail_json(changed=False, msg="aws_data_pipeline: when deleting an existing pipeline either name or pipeline_id should be used but not unique_id")
-        elif pipeline_id is not None and name is not None:
-            module.fail_json(changed=False, msg="aws_data_pipeline: when deleting an existing pipeline either name or pipeline_id should be used but not both")
+            module.fail_json(changed=False, msg="data_pipeline: when deleting an existing pipeline either name or pipeline_id should be used but not unique_id")
         elif name is None and pipeline_id is None:
-            module.fail_json(changed=False, msg="aws_data_pipeline: when deleting an existing pipeline either name or pipeline_id should be used")
+            module.fail_json(changed=False, msg="data_pipeline: when deleting an existing pipeline either name or pipeline_id should be used")
 
     region, ec2_url, aws_connect_kwargs = get_aws_connection_info(module)
 
@@ -163,7 +164,8 @@ def main():
         else:
             dp = boto.datapipeline.layer1.DataPipelineConnection(**aws_connect_kwargs)
     except boto.exception.NoAuthHandlerFound, e:
-        module.fail_json(msg=str(e))
+        module.fail_json(msg=boto_exception(e))
+        return
 
     existing_pipelines = get_all_pipelines(dp)
     existing_pipeline_ids = [p['id'] for p in existing_pipelines]

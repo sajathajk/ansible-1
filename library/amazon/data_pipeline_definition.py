@@ -65,7 +65,6 @@ task:
 
 try:
     import boto
-    from botocore.compat import OrderedDict, json
     HAS_BOTO = True
 except ImportError:
     HAS_BOTO = False
@@ -101,22 +100,24 @@ def define_pipeline(module, dp, pipeline_id, new_definition, parameters):
     changed = False
     try:
         old_definition_objects = dp.get_pipeline_definition(pipelineId=pipeline_id)
-        del old_definition_objects['ResponseMetadata']
-        #print old_definition_objects
         new_definition_objects = to_new_definition_objects(new_definition, parameters)
-        #print new_definition_objects
-        if old_definition_objects is not new_definition_objects:
-            dp.put_pipeline_definition(
-                pipelineId=pipeline_id,
-                pipelineObjects=new_definition_objects['pipelineObjects'],
-                parameterObjects=new_definition_objects['parameterObjects'],
-                parameterValues=new_definition_objects['parameterValues']
-            )
-            changed = True
+        dp.put_pipeline_definition(
+            pipelineId=pipeline_id,
+            pipelineObjects=new_definition_objects['pipelineObjects'],
+            parameterObjects=new_definition_objects['parameterObjects'],
+            parameterValues=new_definition_objects['parameterValues']
+        )
+        changed = not is_definition_same(old_definition_objects, dp.get_pipeline_definition(pipelineId=pipeline_id))
     except boto.exception.BotoServerError, err:
         module.fail_json(changed=changed, msg=boto_exception(err))
     else:
         return changed
+
+
+def is_definition_same(old_def, new_def):
+    del old_def['ResponseMetadata']
+    del new_def['ResponseMetadata']
+    return old_def == new_def
 
 
 def to_new_definition_objects(new_definition, new_parameter_values):
@@ -140,7 +141,7 @@ def get_all_pipelines(dp):
 
 
 def read_pipeline_definition(filename):
-    return json.load(open(filename, 'r'), object_pairs_hook=OrderedDict)
+    return json.load(open(filename, 'r'))
 
 
 def main():

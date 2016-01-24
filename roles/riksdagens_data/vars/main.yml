@@ -1,0 +1,3 @@
+---
+data_pipeline_definition_file: "{{ role_path }}/files/simple_shell_transform.json"
+rds_host: "{{ hostvars[groups['vault13'][0]].inventory_hostname }}"

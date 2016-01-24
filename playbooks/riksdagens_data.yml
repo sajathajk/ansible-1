@@ -8,13 +8,14 @@
   - ec2_keypair
   - ec2_bastion
 
-#- hosts: all
-#  gather_facts: no
-#  tasks:
-#  - meta: refresh_inventory
-
 - hosts: tag_Name_bastion
   gather_facts: no
   roles:
   - ansible_manager
   - riksdagens_database
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+  - riksdagens_data

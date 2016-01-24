@@ -1,0 +1,106 @@
+{
+  "objects": [
+    {
+      "occurrences": "1",
+      "period": "1 Day",
+      "name": "RunOnce",
+      "id": "DefaultSchedule",
+      "type": "Schedule",
+      "startAt": "FIRST_ACTIVATION_DATE_TIME"
+    },
+    {
+      "directoryPath": "#{myS3InputLoc}",
+      "name": "s3_input_data",
+      "id": "S3DataNodeId_3Wsrn",
+      "type": "S3DataNode"
+    },
+    {
+      "directoryPath": "#{myS3AppLoc}",
+      "name": "s3_app_data",
+      "id": "S3DataNode_App",
+      "type": "S3DataNode"
+    },
+    {
+      "failureAndRerunMode": "CASCADE",
+      "schedule": {
+        "ref": "DefaultSchedule"
+      },
+      "resourceRole": "DataPipelineDefaultResourceRole",
+      "role": "DataPipelineDefaultRole",
+      "pipelineLogUri": "#{myS3LogLoc}",
+      "scheduleType": "cron",
+      "name": "Default",
+      "id": "Default"
+    },
+    {
+      "directoryPath": "#{myS3OutputLoc}",
+      "name": "s3_output_data",
+      "id": "S3DataNodeId_t3ik2",
+      "type": "S3DataNode"
+    },
+    {
+      "output": {
+        "ref": "S3DataNodeId_t3ik2"
+      },
+      "input": [
+        { "ref": "S3DataNodeId_3Wsrn" },
+        { "ref": "S3DataNode_App" }
+      ],
+      "schedule": {
+        "ref": "DefaultSchedule"
+      },
+      "stage": "true",
+      "name": "run_shell_cmd",
+      "runsOn": {
+        "ref": "ResourceId_bqN7p"
+      },
+      "id": "ShellCommandActivityId_o5zk6",
+      "type": "ShellCommandActivity",
+      "command": "#{myShellCmd}"
+    },
+    {
+      "schedule": {
+        "ref": "DefaultSchedule"
+      },
+      "resourceRole": "DataPipelineDefaultResourceRole",
+      "role": "DataPipelineDefaultRole",
+      "imageId": "ami-bff32ccc",
+      "instanceType": "t2.micro",
+      "securityGroups" : [
+        "rds_client_sg"
+      ],
+      "keyPair": "ansible_ec2",
+      "name": "my_ec2_micro",
+      "id": "ResourceId_bqN7p",
+      "type": "Ec2Resource",
+      "terminateAfter": "24 Hours"
+    }
+  ],
+  "parameters": [
+    {
+      "description": "S3 output data folder",
+      "id": "myS3OutputLoc",
+      "type": "AWS::S3::ObjectKey"
+    },
+    {
+      "description": "S3 input data folder",
+      "id": "myS3InputLoc",
+      "type": "AWS::S3::ObjectKey"
+    },
+    {
+      "description": "S3 application data folder",
+      "id": "myS3AppLoc",
+      "type": "AWS::S3::ObjectKey"
+    },
+    {
+      "description": "S3 log folder",
+      "id": "myS3LogLoc",
+      "type": "AWS::S3::ObjectKey"
+    },
+    {
+      "description": "Shell command to run",
+      "id": "myShellCmd",
+      "type": "String"
+    }
+  ]
+}

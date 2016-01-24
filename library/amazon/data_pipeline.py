@@ -48,6 +48,11 @@ options:
       - A hash of all the parameter values used when activating the pipeline. This overrides parameters from the pipeline definition.
     required: false
     default: {}
+  tags:
+    description:
+      - A hash of tags to associate with the pipeline at creation. Tags let you control access to pipelines.
+    required: false
+    default: {}
 extends_documentation_fragment:
     - aws
 '''
@@ -113,16 +118,25 @@ def delete_pipeline(module, dp, pipeline_id):
         return True
 
 
-def create_pipeline(module, dp, name, unique_id, description=None):
+def create_pipeline(module, dp, name, unique_id, description=None, tags=None):
     try:
         req = dict(name=name, uniqueId=unique_id,)
         if description is not None:
             req['description'] = description
+        if tags is not None:
+            req['tags'] = convert_tags(tags)
         res = dp.create_pipeline(**req)
     except boto.exception.BotoServerError, err:
         module.fail_json(changed=False, msg=boto_exception(err))
     else:
         return True, res['pipelineId']
+
+
+def convert_tags(tags):
+    res = []
+    for key in tags:
+        res.append(dict(key=key, value=tags[key]))
+    return res
 
 
 def activate_pipeline(module, dp, pipeline_id, parameters):
@@ -164,7 +178,8 @@ def main():
             unique_id=dict(default=None, required=False),
             description=dict(default=None, required=False),
             state=dict(default='present', choices=['present', 'active', 'inactive', 'absent']),
-            parameters=dict(default=None, required=False)
+            parameters=dict(default=None, required=False),
+            tags=dict(default=None, required=False)
     ))
 
     module = AnsibleModule(
@@ -186,6 +201,7 @@ def main():
     pipeline_id = module.params.get('pipeline_id')
     state = module.params.get('state').lower()
     activation_parameters = module.params.get('parameters')
+    tags = module.params.get('tags')
 
     changed = False
 
@@ -231,7 +247,7 @@ def main():
         module.exit_json(changed=changed, deleted_pipeline_ids=deleted_pipeline_ids)
     elif state == 'present':
         description = module.params.get('description')
-        changed, pipeline_id = create_pipeline(module, dp, name, unique_id, description)
+        changed, pipeline_id = create_pipeline(module, dp, name, unique_id, description, tags)
         changed = changed and pipeline_id not in existing_pipeline_ids
     elif state == 'active' and pipeline_id in existing_pipeline_ids:
         changed = activate_pipeline(module, dp, pipeline_id, activation_parameters)

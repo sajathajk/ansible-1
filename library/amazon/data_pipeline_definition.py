@@ -45,22 +45,23 @@ EXAMPLES = '''
   data_pipeline:
     name: my-big-data-pipeline
     unique_id: my-unique-pipeline-name
+    region: "{{ ec2_region }}"
   register: new_pipeline
-
 - name: It has a funny shape
   data_pipeline_definition:
     pipeline_id: "{{ new_pipeline.pipeline_id }}"
-    objects:
-
-# A reverse action that removes previously created pipelines 'my-big-data-pipeline' and 'my-event-pipeline'
-task:
-- name: The Fish follows the Flow
+    definition: roles/shell_data_pipeline/files/simple_shell_transform.json
+    parameters:
+      myS3InputLoc: s3://bucket/in/riksdagen
+      myS3OutputLoc: s3://bucket/out/riksdagen
+      myS3LogLoc: s3://bucket/logs/data-pipelines
+      myShellCmd: cd ${OUTPUT1_STAGING_DIR} && curl -sS "http://data.riksdagen.se/Data/Ledamoter/" | grep -io 'http://data\\\\.riksdagen\\\\.se.*\\\\.sql\\\\.zip' | sed 's/ /%20/' | while read i; do echo "$i" && curl -O "$i" ; done
+  register: pipeline_def
+- name: It's alive!
   data_pipeline:
-    name: "{{ item }}"
-    state: absent
-  with_items:
-  - my-big-data-pipeline
-  - my-event-pipeline
+    pipeline_id: "{{ new_pipeline.pipeline_id }}"
+    state: active
+  when: pipeline_def.changed
 '''
 
 try:

@@ -1,3 +1,0 @@
----
-logs_s3_path: s3://datawithoutborders/logs/data-pipelines
-pipeline_definition_uri: file://{{ role_path }}/files/simple_shell_transform.json

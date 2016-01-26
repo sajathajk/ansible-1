@@ -1,0 +1,21 @@
+---
+- hosts: rds
+  gather_facts: no
+  tasks:
+  - name: Snapshot RDS and delete instances
+    rds:
+      command: delete
+      instance_name: "{{ ec2_id }}"
+      snapshot: "{{ ec2_id }}-hibernate-snapshot"
+      region: "{{ ec2_region }}"
+    delegate_to: localhost
+
+- hosts: ec2
+  gather_facts: no
+  tasks:
+  - name: Stop EC2 instances
+    ec2:
+      instance_id: "{{ ec2_id }}"
+      state: stopped
+      region: "{{ ec2_region }}"
+    delegate_to: localhost

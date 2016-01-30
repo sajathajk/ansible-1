@@ -1,10 +1,19 @@
 ---
-emr_cluster_name: my-emr-cluster
 s3_bucket_name: datawithoutborders
+emr_cluster_name: my-emr-cluster
+emr_release_label: emr-4.3.0
+emr_cluster_log_url: "s3n://{{ s3_bucket_name }}/logs/{{ emr_cluster_name }}"
+emr_instance_count: 1
+emr_instance_type: m1.medium
 sqoop_s3_dir: app/sqoop
 s3_dest_url: "s3://{{ s3_bucket_name }}/{{ sqoop_s3_dir }}"
 sqoop_dist_name: sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz
 sqoop_dist_url: "http://apache.mirrors.spacedump.net/sqoop/1.4.6/{{ sqoop_dist_name }}"
+sqoop_s3_dest_url: "{{ s3_dest_url }}/{{ sqoop_dist_name }}"
 sqoop_install_script_name: install_sqoop.sh
+sqoop_install_script_dest_url: "{{ s3_dest_url }}/{{ sqoop_install_script_name }}"
 pg_jdbc_dist_name: postgresql-9.4.1207.jre7.jar
 pg_jdbc_dist_url: "https://jdbc.postgresql.org/download/{{ pg_jdbc_dist_name }}"
+pg_jdbc_s3_dest_url: "{{ s3_dest_url }}/{{ pg_jdbc_dist_name }}"
+emr_configurations_url: "file://{{ role_path }}/files/emr-configurations.json"
+emr_ec2_additional_security_groups: sg-f4077690,sg-b2cf85d6

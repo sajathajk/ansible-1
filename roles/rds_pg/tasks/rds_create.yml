@@ -1,5 +1,5 @@
 ---
-- name: RDS instance
+- name: Create RDS instance
   local_action:
     module: rds
     command: create

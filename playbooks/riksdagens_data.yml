@@ -4,7 +4,7 @@
   connection: local
   gather_facts: no
   roles:
-  - { role: rds_pg, rds_size_gb: 20 }
+  - { role: rds_pg, rds_size_gb: 20, action: create }
   - ec2_keypair
   - ec2_bastion
 

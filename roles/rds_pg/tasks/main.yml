@@ -2,4 +2,7 @@
 - include: sg.yml
 - include: rds_subnet_group.yml
 - include: rds_param_group.yml
-- include: rds.yml
+- include: rds_create.yml
+  when: action == "create"
+- include: rds_restore.yml
+  when: action == "restore"

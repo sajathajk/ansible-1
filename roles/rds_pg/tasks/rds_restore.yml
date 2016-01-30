@@ -1,0 +1,34 @@
+---
+- name: Restore RDS instance from backup
+  local_action:
+    module: rds
+    command: restore
+    snapshot: "{{ rds_instance_name }}-hibernate-snapshot"
+    region: "{{ rds_region }}"
+    db_engine: "{{ rds_db_engine }}"
+    instance_name: "{{ rds_instance_name }}"
+    instance_type: "{{ rds_instance_type }}"
+    username: "{{ rds_username }}"
+    publicly_accessible: "{{ rds_publicly_accessible }}"
+    multi_zone: "{{ rds_multi_zone }}"
+    subnet: "{{ rds_subnet_group_name }}"
+    upgrade: "{{ rds_upgrade }}"
+    wait: yes
+    wait_timeout: 3600
+    tags:
+      Environment: "{{ ec2_tag_Environment }}"
+      Name: "{{ rds_instance_name }}"
+
+- name: Update RDS instance parameters
+  local_action:
+    module: rds
+    command: modify
+    region: "{{ rds_region }}"
+    instance_name: "{{ rds_instance_name }}"
+    parameter_group: "{{ rds_param_group_name }}"
+    vpc_security_groups: "{{ item }}"
+    maint_window: "{{ rds_maint_window }}"
+    backup_retention: "{{ rds_backup_retention_days }}"
+    backup_window: "{{ rds_backup_window }}"
+  with_items: rds_sg.group_id
+

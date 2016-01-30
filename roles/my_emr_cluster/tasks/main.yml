@@ -1,0 +1,3 @@
+---
+- include: sqoop.yml
+- include: emr.yml

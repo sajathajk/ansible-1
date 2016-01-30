@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+  - my_emr_cluster

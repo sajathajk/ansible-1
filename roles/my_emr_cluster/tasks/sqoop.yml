@@ -1,0 +1,29 @@
+---
+- name: Create Sqoop app files directory in S3
+  s3: bucket={{ s3_bucket_name }} mode=create object={{ sqoop_s3_dir }}
+  register: s3_sqoop_app_dir
+
+- block:
+  - name: Create tmp directory
+    shell: mktemp -d /tmp/sqoop_dist.XXXXXX
+    register: tmp_dir
+  - name: Download Sqoop and PostgreSQL JDBC distributives
+    get_url:
+      dest: "{{ tmp_dir.stdout }}"
+      url: "{{ item }}"
+    with_items:
+    - "{{ sqoop_dist_url }}"
+    - "{{ pg_jdbc_dist_url }}"
+  - name: Upload Sqoop and PostgreSQL JDBC files to S3
+    s3:
+      mode: put
+      bucket: "{{ s3_bucket_name }}"
+      object: "{{ sqoop_s3_dir }}/{{ item | basename }}"
+      src: "{{ item }}"
+    with_items:
+    - "{{ tmp_dir.stdout }}/{{ sqoop_dist_name }}"
+    - "{{ tmp_dir.stdout }}/{{ pg_jdbc_dist_name }}"
+    - "{{ role_path }}/files/{{ sqoop_install_script_name }}"
+  - name: Cleanup temp data
+    file: path={{ tmp_dir.stdout }} state=absent
+  when: s3_sqoop_app_dir.changed

@@ -6,20 +6,18 @@
 - name: Display all variables/facts known for a host
   debug: var=hostvars[inventory_hostname]
 - set_fact: existing_emrs="{{ existing_emrs_res.stdout | from_json }}"
-- name: Display all variables/facts known for a host
-  debug: var=hostvars[inventory_hostname]
-- debug: Have active clusters
-  when: existing_emrs.Clusters | length > 0
-#- name: Create EMR cluster
-#  command: "aws emr create-cluster --name \"{{ emr_cluster_name }}\" \
-#             --enable-debugging \
-#             --log-uri {{ emr_cluster_log_url }} \
-#             --release-label {{ emr_release_label }} \
-#             --applications Name=Spark Name=Zeppelin-Sandbox \
-#             --ec2-attributes KeyName=ansible_ec2,AdditionalMasterSecurityGroups=[{{ emr_ec2_additional_security_groups }}] \
-#             --bootstrap-action Path={{ sqoop_install_script_dest_url }},Args=[\"{{ sqoop_s3_dest_url }}\",\"{{ pg_jdbc_s3_dest_url }}\"] \
-#             --configurations {{ emr_configurations_url }} \
-#             --instance-count {{ emr_instance_count }} \
-#             --instance-type {{ emr_instance_type }} \
-#             --use-default-roles"
-#  when:
+- name: Create EMR cluster
+  command: >
+    aws emr create-cluster --name "{{ emr_cluster_name }}"
+    --enable-debugging
+    --log-uri {{ emr_cluster_log_url }}
+    --release-label {{ emr_release_label }}
+    --applications Name=Spark Name=Zeppelin-Sandbox
+    --ec2-attributes KeyName=ansible_ec2,AdditionalMasterSecurityGroups=[{{ emr_ec2_additional_security_groups }}]
+    --bootstrap-action Path={{ sqoop_install_script_dest_url }},Args=["{{ sqoop_s3_dest_url }}","{{ pg_jdbc_s3_dest_url }}"]
+    --configurations {{ emr_configurations_url }}
+    --instance-count {{ emr_instance_count }}
+    --instance-type {{ emr_instance_type }}
+    --use-default-roles
+    --output json
+  when: existing_emrs.Clusters | length == 0

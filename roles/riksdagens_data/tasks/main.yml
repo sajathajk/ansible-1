@@ -58,7 +58,7 @@
       myS3OutputLoc: "{{ s3_empty_data_path }}"
       myS3LogLoc: "{{ s3_data_pipeline_log_path }}"
       myS3AppLoc: "{{ s3_riksdagens_app_path }}"
-      myShellCmd: "bash ${INPUT2_STAGING_DIR}/data_to_rds.sh {{ rds_host }}"
+      myShellCmd: "bash -x ${INPUT2_STAGING_DIR}/data_to_rds.sh {{ rds_host }}"
   register: data_to_rds_pipeline_def
 
 - name: Activate the pipeline

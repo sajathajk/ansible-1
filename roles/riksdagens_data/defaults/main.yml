@@ -1,5 +1,4 @@
 ---
-s3_bucket_name: datawithoutborders
 s3_riksdagens_data_dir: data/riksdagen
 s3_riksdagens_data_path: s3://{{ s3_bucket_name }}/{{ s3_riksdagens_data_dir }}
 s3_empty_data_dir: data/empty

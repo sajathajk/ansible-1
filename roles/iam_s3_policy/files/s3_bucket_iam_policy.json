@@ -16,7 +16,7 @@
         "s3:ListBucket"
       ],
       "Effect": "Allow",
-      "Resource": "arn:aws:s3:::datawithoutborders"
+      "Resource": "arn:aws:s3:::nonprofitanalytics"
     },
     {
       "Sid": "Stmt1452108890206",
@@ -26,7 +26,7 @@
         "s3:PutObject"
       ],
       "Effect": "Allow",
-      "Resource": "arn:aws:s3:::datawithoutborders/*"
+      "Resource": "arn:aws:s3:::nonprofitanalytics/*"
     }
   ]
 }

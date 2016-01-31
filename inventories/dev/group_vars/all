@@ -2,3 +2,4 @@
 ansible_python_interpreter: "/usr/bin/env python"
 ec2_region: eu-west-1
 ec2_tag_Environment: development
+s3_bucket_name: nonprofitanalytics

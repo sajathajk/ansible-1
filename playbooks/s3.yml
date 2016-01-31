@@ -3,6 +3,5 @@
 - hosts: localhost
   connection: local
   gather_facts: no
-  tasks:
-  - name: Create S3 bucket
-    s3: bucket={{ s3_bucket_name }} mode=create region={{ ec2_region }}
+  roles:
+  - s3_bucket

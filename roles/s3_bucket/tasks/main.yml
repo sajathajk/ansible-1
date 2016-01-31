@@ -1,0 +1,7 @@
+---
+- name: Create S3 bucket
+  s3_bucket:
+    name: "{{ s3_bucket_name }}"
+    state: present
+    region: "{{ ec2_region }}"
+    policy: "{{ lookup('file', role_path + '/files/policy.json') }}"

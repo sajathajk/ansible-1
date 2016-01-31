@@ -1,0 +1,41 @@
+---
+# roughly follows http://docs.aws.amazon.com/AmazonS3/latest/dev/website-hosting-custom-domain-walkthrough.html
+- name: Create S3 bucket for root
+  s3_bucket:
+    name: "{{ s3_bucket_name_root }}"
+    state: present
+    region: "{{ ec2_region }}"
+- name: Create S3 bucket for WWW
+  s3_bucket:
+    name: "{{ s3_bucket_name_www }}"
+    state: present
+    region: "{{ ec2_region }}"
+    policy: "{{ lookup('file', role_path + '/files/policy.json') }}"
+- name: Upload website content
+  s3:
+    mode: put
+    bucket: "{{ s3_bucket_name_www }}"
+    object: "{{ item }}"
+    region: "{{ ec2_region }}"
+    src: "{{ role_path + '/files/' + item }}"
+  with_items:
+    - index.html
+# TODO: configure S3 to host files
+- name: Craete root DNS record
+  route53:
+      command=create
+      zone="{{ route53_hosted_zone }}"
+      record="{{ route53_dn_root }}"
+      type=A
+      value="{{ s3_bucket_url_root }}"
+      alias=True
+      alias_hosted_zone_id="{{ s3_bucket_dns_hosted_zone }}"
+- name: Craete WWW DNS record
+  route53:
+      command=create
+      zone="{{ route53_hosted_zone }}"
+      record="{{ route53_dn_www }}"
+      type=A
+      value="{{ s3_bucket_url_www }}"
+      alias=True
+      alias_hosted_zone_id="{{ s3_bucket_dns_hosted_zone }}"

@@ -1,0 +1,14 @@
+---
+s3_bucket_name_root: npa.institute
+s3_bucket_name_www: www.npa.institute
+#s3-website-eu-west-1.amazonaws.com
+s3_bucket_url_root: "s3-website-eu-west-1.amazonaws.com"
+#{{ s3_bucket_name_root }}.s3-website-eu-west-1.amazonaws.com"
+s3_bucket_url_www: "s3-website-eu-west-1.amazonaws.com"
+#"{{ s3_bucket_name_www }}.s3-website-eu-west-1.amazonaws.com"
+# http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
+s3_bucket_dns_hosted_zone: Z1BKCTXD74EZPE
+route53_hosted_zone: npa.institute
+route53_hosted_zone_id: ZCRB4AXVI75Y0
+route53_dn_root: "{{ s3_bucket_name_root }}"
+route53_dn_www: "{{ s3_bucket_name_www }}"

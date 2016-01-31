@@ -15,4 +15,4 @@ pg_jdbc_dist_name: postgresql-9.4.1207.jre7.jar
 pg_jdbc_dist_url: "https://jdbc.postgresql.org/download/{{ pg_jdbc_dist_name }}"
 pg_jdbc_s3_dest_url: "{{ s3_dest_url }}/{{ pg_jdbc_dist_name }}"
 emr_configurations_url: "file://{{ role_path }}/files/emr-configurations.json"
-emr_ec2_additional_security_groups: sg-f4077690,sg-b2cf85d6
+emr_ec2_additional_security_groups: sg-f4077690,sg-b2cf85d6,sg-f9d2879d

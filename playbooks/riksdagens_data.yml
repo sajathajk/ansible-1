@@ -1,18 +1,18 @@
 ---
 
-- hosts: localhost
-  connection: local
-  gather_facts: no
-  roles:
-  - { role: rds_pg, rds_size_gb: 20, action: create }
-  - ec2_keypair
-  - ec2_bastion
-
-- hosts: tag_Name_bastion
-  gather_facts: no
-  roles:
-  - ansible_manager
-  - riksdagens_database
+#- hosts: localhost
+#  connection: local
+#  gather_facts: no
+#  roles:
+#  - { role: rds_pg, rds_size_gb: 20, action: create }
+#  - ec2_keypair
+#  - ec2_bastion
+#
+#- hosts: tag_Name_bastion
+#  gather_facts: no
+#  roles:
+#  - ansible_manager
+#  - riksdagens_database
 
 - hosts: localhost
   connection: local

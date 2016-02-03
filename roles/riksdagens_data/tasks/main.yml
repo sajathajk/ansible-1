@@ -40,29 +40,29 @@
     state: active
   when: data_to_s3_pipeline_def.changed
 
-- name: Create a pipeline to insert Riksdagens data from S3 to RDS
-  data_pipeline:
-    name: riksdagens_data_to_rds
-    unique_id: riksdagens_data_to_rds
-    tags:
-      Role: riksdagens_data
-      Environment: "{{ ec2_tag_Environment }}"
-  register: data_to_rds_pipeline
-
-- name: Setup the pipeline
-  data_pipeline_definition:
-    pipeline_id: "{{ data_to_rds_pipeline.pipeline_id }}"
-    definition: "{{ data_pipeline_definition_file }}"
-    parameters:
-      myS3InputLoc: "{{ s3_riksdagens_data_path }}"
-      myS3OutputLoc: "{{ s3_empty_data_path }}"
-      myS3LogLoc: "{{ s3_data_pipeline_log_path }}"
-      myS3AppLoc: "{{ s3_riksdagens_app_path }}"
-      myShellCmd: "bash -x ${INPUT2_STAGING_DIR}/data_to_rds.sh {{ rds_host }}"
-  register: data_to_rds_pipeline_def
-
-- name: Activate the pipeline
-  data_pipeline:
-    pipeline_id: "{{ data_to_rds_pipeline.pipeline_id }}"
-    state: active
-  when: data_to_rds_pipeline_def.changed
+#- name: Create a pipeline to insert Riksdagens data from S3 to RDS
+#  data_pipeline:
+#    name: riksdagens_data_to_rds
+#    unique_id: riksdagens_data_to_rds
+#    tags:
+#      Role: riksdagens_data
+#      Environment: "{{ ec2_tag_Environment }}"
+#  register: data_to_rds_pipeline
+#
+#- name: Setup the pipeline
+#  data_pipeline_definition:
+#    pipeline_id: "{{ data_to_rds_pipeline.pipeline_id }}"
+#    definition: "{{ data_pipeline_definition_file }}"
+#    parameters:
+#      myS3InputLoc: "{{ s3_riksdagens_data_path }}"
+#      myS3OutputLoc: "{{ s3_empty_data_path }}"
+#      myS3LogLoc: "{{ s3_data_pipeline_log_path }}"
+#      myS3AppLoc: "{{ s3_riksdagens_app_path }}"
+#      myShellCmd: "bash -x ${INPUT2_STAGING_DIR}/data_to_rds.sh {{ rds_host }}"
+#  register: data_to_rds_pipeline_def
+#
+#- name: Activate the pipeline
+#  data_pipeline:
+#    pipeline_id: "{{ data_to_rds_pipeline.pipeline_id }}"
+#    state: active
+#  when: data_to_rds_pipeline_def.changed

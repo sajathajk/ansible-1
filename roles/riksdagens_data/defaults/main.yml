@@ -1,5 +1,5 @@
 ---
-s3_riksdagens_data_dir: data/riksdagen_unzipped_json
+s3_riksdagens_data_dir: data/riksdagen/json
 s3_riksdagens_data_path: s3://{{ s3_bucket_name }}/{{ s3_riksdagens_data_dir }}
 s3_empty_data_dir: data/empty
 s3_empty_data_path: s3://{{ s3_bucket_name }}/{{ s3_empty_data_dir }}

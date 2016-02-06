@@ -8,8 +8,8 @@ do
         | grep -io 'http://data\.riksdagen\.se.*\.json\.zip' \
         | sed 's/ /%20/' \
         | while read url; do echo "$url" && curl -fsSO "$url" ; done
-    for file in *.json.zip
-    do
-        unzip -d $(basename $file .json.zip) $file && rm $file
-    done
+#    for file in *.json.zip
+#    do
+#        unzip -d $(basename $file .json.zip) $file && rm $file
+#    done
 done

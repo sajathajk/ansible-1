@@ -5,5 +5,20 @@
       "yarn.nodemanager.aux-services": "mapreduce_shuffle,spark_shuffle",
       "yarn.nodemanager.aux-services.mapreduce_shuffle.class": "org.apache.hadoop.mapred.ShuffleHandler"
     }
+  },
+  {
+    "Classification": "zeppelin-env",
+    "Properties":{
+    },
+    "Configurations":[
+      {
+        "Classification": "export",
+        "Properties":{
+          "ZEPPELIN_NOTEBOOK_S3_BUCKET": "nonprofitanalytics",
+          "ZEPPELIN_NOTEBOOK_S3_USER": "zeppelin",
+          "ZEPPELIN_NOTEBOOK_STORAGE": "org.apache.zeppelin.notebook.repo.S3NotebookRepo"
+        }
+      }
+    ]
   }
 ]

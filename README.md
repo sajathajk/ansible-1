@@ -2,9 +2,7 @@
 
 Run `pip install -r requirements.txt`
 
-# Usage
-
-`ansible-playbook site.yml`
+Put the ansible_ec2.pem to ~/.ssh/ansible_ec2.pem and chown it to 0400
 
 # Access to RDS
 
@@ -21,3 +19,17 @@ Run `pip install -r requirements.txt`
 Use your favorite PostgreSQL client and point it to `localhost:5432`, for example:
 
 `psql -U ChosenOne -h localhost postgres`
+
+# Access to EMR
+
+## Start EMR cluster
+
+    ansible-playbook -i inventories/dev/ playbooks/emr.yml
+
+## Socks proxy to a running EMR cluster
+
+    aws emr socks --cluster-id $(aws emr list-clusters --active --output=json | jq -r '.Clusters[0].Id') --key-pair-file ~/.ssh/ansible_ec2.pem
+
+## Stop the EMR cluster
+
+    aws emr terminate-clusters --cluster-ids $(aws emr list-clusters --active --output=json | jq -r '.Clusters[0].Id')

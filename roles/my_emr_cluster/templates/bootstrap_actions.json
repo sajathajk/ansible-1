@@ -1,0 +1,7 @@
+[
+  {
+    "Name": "Install Sqoop",
+    "Path": "{{ sqoop_install_script_dest_url }}",
+    "Args": ["{{ sqoop_s3_dest_url }}", "{{ pg_jdbc_s3_dest_url }}"]
+  }
+]

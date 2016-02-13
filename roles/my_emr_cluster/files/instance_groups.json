@@ -1,0 +1,12 @@
+[
+  {
+    "InstanceCount": 1,
+    "InstanceGroupType": "MASTER",
+    "InstanceType": "m1.medium"
+  },
+  {
+    "InstanceCount": 1,
+    "InstanceGroupType": "CORE",
+    "InstanceType": "m1.medium"
+  }
+]

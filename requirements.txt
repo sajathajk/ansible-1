@@ -1,4 +1,4 @@
 ansible~=2.0.0
 boto~=2.38.0
 boto3~=1.2.3
-awscli~1.10
+awscli~=1.10

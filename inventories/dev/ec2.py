@@ -242,7 +242,7 @@ class Ec2Inventory(object):
         self.route53_excluded_zones = []
         if config.has_option('ec2', 'route53_excluded_zones'):
             self.route53_excluded_zones.extend(
-                config.get('ec2', 'route53_excluded_zones', '').split(','))
+                    config.get('ec2', 'route53_excluded_zones', '').split(','))
 
         # Include RDS instances?
         self.rds_enabled = True
@@ -274,13 +274,13 @@ class Ec2Inventory(object):
         if self.all_instances:
             self.ec2_instance_states = ec2_valid_instance_states
         elif config.has_option('ec2', 'instance_states'):
-          for instance_state in config.get('ec2', 'instance_states').split(','):
-            instance_state = instance_state.strip()
-            if instance_state not in ec2_valid_instance_states:
-              continue
-            self.ec2_instance_states.append(instance_state)
+            for instance_state in config.get('ec2', 'instance_states').split(','):
+                instance_state = instance_state.strip()
+                if instance_state not in ec2_valid_instance_states:
+                    continue
+                self.ec2_instance_states.append(instance_state)
         else:
-          self.ec2_instance_states = ['running']
+            self.ec2_instance_states = ['running']
 
         # Return all RDS instances? (if RDS is enabled)
         if config.has_option('ec2', 'all_rds_instances') and self.rds_enabled:
@@ -402,13 +402,13 @@ class Ec2Inventory(object):
 
         parser = argparse.ArgumentParser(description='Produce an Ansible Inventory file based on EC2')
         parser.add_argument('--list', action='store_true', default=True,
-                           help='List instances (default: True)')
+                            help='List instances (default: True)')
         parser.add_argument('--host', action='store',
-                           help='Get all the variables about a specific instance')
+                            help='Get all the variables about a specific instance')
         parser.add_argument('--refresh-cache', action='store_true', default=False,
-                           help='Force refresh of cache by making API requests to EC2 (default: False - use cache files)')
-        parser.add_argument('--boto-profile', action='store',
-                           help='Use boto profile for connections to EC2')
+                            help='Force refresh of cache by making API requests to EC2 (default: False - use cache files)')
+        parser.add_argument('--profile', '--boto-profile', action='store', dest='boto_profile',
+                            help='Use boto profile for connections to EC2')
         self.args = parser.parse_args()
 
 
@@ -480,7 +480,7 @@ class Ec2Inventory(object):
             if e.error_code == 'AuthFailure':
                 error = self.get_auth_error_message()
             else:
-                backend = 'Eucalyptus' if self.eucalyptus else 'AWS' 
+                backend = 'Eucalyptus' if self.eucalyptus else 'AWS'
                 error = "Error connecting to %s backend.\n%s" % (backend, e.message)
             self.fail_with_error(error, 'getting EC2 instances')
 
@@ -594,7 +594,7 @@ class Ec2Inventory(object):
         '''log an error to std err for ansible-playbook to consume and exit'''
         if err_operation:
             err_msg = 'ERROR: "{err_msg}", while: {err_operation}'.format(
-                err_msg=err_msg, err_operation=err_operation)
+                    err_msg=err_msg, err_operation=err_operation)
         sys.stderr.write(err_msg)
         sys.exit(1)
 
@@ -696,8 +696,8 @@ class Ec2Inventory(object):
                     if self.nested_groups:
                         self.push_group(self.inventory, 'security_groups', key)
             except AttributeError:
-                self.fail_with_error('\n'.join(['Package boto seems a bit older.', 
-                                            'Please upgrade boto >= 2.3.0.']))
+                self.fail_with_error('\n'.join(['Package boto seems a bit older.',
+                                                'Please upgrade boto >= 2.3.0.']))
 
         # Inventory: Group by tag keys
         if self.group_by_tag_keys:
@@ -800,8 +800,8 @@ class Ec2Inventory(object):
                         self.push_group(self.inventory, 'security_groups', key)
 
             except AttributeError:
-                self.fail_with_error('\n'.join(['Package boto seems a bit older.', 
-                                            'Please upgrade boto >= 2.3.0.']))
+                self.fail_with_error('\n'.join(['Package boto seems a bit older.',
+                                                'Please upgrade boto >= 2.3.0.']))
 
 
         # Inventory: Group by engine
@@ -1324,4 +1324,3 @@ class Ec2Inventory(object):
 
 # Run the script
 Ec2Inventory()
-

@@ -7,6 +7,12 @@
     }
   },
   {
+    "Classification": "spark",
+    "Properties": {
+      "maximizeResourceAllocation": "true"
+    }
+  },
+  {
     "Classification": "zeppelin-env",
     "Properties":{
     },

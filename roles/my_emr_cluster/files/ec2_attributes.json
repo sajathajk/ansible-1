@@ -1,5 +1,5 @@
 {
   "KeyName": "ansible_ec2",
   "AdditionalMasterSecurityGroups": ["sg-b2cf85d6", "sg-f9d2879d"],
-  "AdditionalSlaveSecurityGroups": ["sg-f4077690"]
+  "AdditionalSlaveSecurityGroups": ["sg-f4077690", "sg-b2cf85d6", "sg-f9d2879d"]
 }

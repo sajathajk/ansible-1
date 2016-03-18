@@ -22,7 +22,8 @@
         "Properties":{
           "ZEPPELIN_NOTEBOOK_S3_BUCKET": "nonprofitanalytics",
           "ZEPPELIN_NOTEBOOK_S3_USER": "zeppelin",
-          "ZEPPELIN_NOTEBOOK_STORAGE": "org.apache.zeppelin.notebook.repo.S3NotebookRepo"
+          "ZEPPELIN_NOTEBOOK_STORAGE": "org.apache.zeppelin.notebook.repo.S3NotebookRepo",
+          "SPARK_SUBMIT_OPTIONS": "\"--packages com.databricks:spark-avro_2.10:2.0.1\""
         }
       }
     ]

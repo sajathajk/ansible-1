@@ -79,3 +79,20 @@
       from_port: 123
       to_port: 123
       cidr_ip: 0.0.0.0/0
+
+- name: Create Git & SSH outbound SG
+  local_action:
+    module: ec2_group
+    name: git_ssh_to_anywhere_sg
+    description: Git & SSH egress
+    region: "{{ ec2_region }}"
+    state: present
+    rules_egress:
+    - proto: tcp
+      from_port: 9418
+      to_port: 9418
+      cidr_ip: 0.0.0.0/0
+    - proto: tcp
+      from_port: 22
+      to_port: 22
+      cidr_ip: 0.0.0.0/0

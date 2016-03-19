@@ -10,9 +10,11 @@
     - ssh_from_home_sg
     - http_s_to_anywhere_sg
     - ntp_to_anywhere_sg
+    - git_ssh_to_anywhere_sg
     instance_type: "{{ ec2_instance_type }}"
     image: "{{ ec2_ami }}"
     instance_profile_name: "{{ ec2_iam_instance_profile_name }}"
+    spot_price: "{{ ec2_spot_price }}"
     wait: yes
     instance_tags:
       Environment: "{{ ec2_tag_Environment }}"

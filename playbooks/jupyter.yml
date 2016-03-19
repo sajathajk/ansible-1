@@ -5,7 +5,8 @@
   gather_facts: no
   roles:
   - trusted_sg
-  - jupyter_ec2
+  - { role: jupyter_ec2, ec2_instance_type: t2.medium }
+  #- { role: jupyter_ec2, ec2_instance_type: c4.8xlarge, ec2_spot_price: 0.3255 }
 
 - hosts: tag_Name_jupyter
   roles:

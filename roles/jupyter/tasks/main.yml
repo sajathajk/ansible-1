@@ -70,7 +70,23 @@
   - scikit-learn
   - skflow
   - matplotlib
-  - xgboost
+#  - xgboost
+
+- stat: path={{ ansible_env.HOME }}/xgboost
+  register: xgb
+
+- block:
+  - name: Clone XGBoost repo
+    git: repo=https://github.com/dmlc/xgboost.git dest={{ ansible_env.HOME }}/xgboost
+  - name: Build XGBoost
+    command: sh build.sh
+    args:
+      chdir: "{{ ansible_env.HOME }}/xgboost"
+  - name: Install XGBoost python module
+    command: python setup.py install
+    args:
+      chdir: "{{ ansible_env.HOME }}/xgboost/python-package"
+  when: xgb.stat.exists == False
 
 - name: Update remote kernel configuration
   local_action:

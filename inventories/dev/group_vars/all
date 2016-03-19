@@ -1,5 +1,5 @@
 ---
-ansible_python_interpreter: "/usr/bin/env python"
+ansible_python_interpreter: "/usr/bin/env python27"
 ec2_region: eu-west-1
 ec2_tag_Environment: development
 ec2_ami: ami-e1398992 # Amazon Linux 2015.09.2 EU Ireland HVM (SSD) EBS-Backed 64-bit

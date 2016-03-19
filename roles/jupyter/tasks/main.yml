@@ -1,0 +1,79 @@
+---
+#
+#- name: Create Jupyter user
+#  become: yes
+#  user: name=jupyter system=yes
+
+- name: Install pre-requisites
+  become: yes
+  yum: name={{ item }}
+  with_items:
+  - "@Development tools"
+  - git
+  - zlib-devel
+  - bzip2
+  - bzip2-devel
+  - readline-devel
+  - sqlite
+  - sqlite-devel
+  - openssl-devel
+  - freetype-devel
+  - libpng-devel
+  - lapack-devel
+  - atlas-devel
+
+#- block:
+#  - name: Install pyenv
+#    shell: curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
+#    args:
+#      creates: /home/jupyter/.pyenv
+#  - name: Init pyenv
+#    lineinfile: dest="/home/jupyter/.bashrc" insertafter=EOF line={{ item }}
+#    with_items:
+#      - 'export PATH="/home/jupyter/.pyenv/bin:$PATH"'
+#      - 'eval "$(pyenv init -)"'
+#      - 'eval "$(pyenv virtualenv-init -)"'
+#  - name: Install relevant Python
+#    shell: . $HOME/.bashrc && pyenv install {{ python_version }}
+#    args:
+#      creates: /home/jupyter/.pyenv/versions/{{ python_version }}
+#  become: yes
+#  become_user: jupyter
+
+- name: Install pyenv
+  shell: curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
+  args:
+    creates: "{{ ansible_env.HOME }}/.pyenv"
+- name: Init pyenv
+  lineinfile: dest="{{ ansible_env.HOME }}/.bashrc" insertafter=EOF line={{ item }}
+  with_items:
+    - 'export PATH="$HOME/.pyenv/bin:$PATH"'
+    - 'eval "$(pyenv init -)"'
+    - 'eval "$(pyenv virtualenv-init -)"'
+- name: Install relevant Python
+  shell: . {{ ansible_env.HOME }}/.bashrc && pyenv install {{ python_version }}
+  args:
+    creates: "{{ ansible_env.HOME }}/.pyenv/versions/{{ python_version }}"
+- name: Switch to installed Python
+  shell: . {{ ansible_env.HOME }}/.bashrc && pyenv global {{ python_version }}
+  args:
+    creates: "{{ ansible_env.HOME }}/.pyenv/version"
+
+- name: Install Python modules
+  pip: name={{ item }}
+  with_items:
+  - numpy
+  - scipy
+  - pandas
+  - jupyter
+  - https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.7.1-cp34-none-linux_x86_64.whl
+  - scikit-learn
+  - skflow
+  - matplotlib
+  - xgboost
+
+- name: Update remote kernel configuration
+  local_action:
+    module: template
+    src: "{{ role_path }}/templates/kernel.json"
+    dest: "~/.ipython/kernels/template/kernel.json"

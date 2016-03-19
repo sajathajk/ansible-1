@@ -1,0 +1,33 @@
+---
+
+- name: Create an EC2 jupyter node
+  local_action:
+    module: ec2
+    region: "{{ ec2_region }}"
+    key_name: "{{ ec2_key_name }}"
+    group:
+    - ssh_from_privatevpn_sg
+    - ssh_from_home_sg
+    - http_s_to_anywhere_sg
+    - ntp_to_anywhere_sg
+    instance_type: "{{ ec2_instance_type }}"
+    image: "{{ ec2_ami }}"
+    instance_profile_name: "{{ ec2_iam_instance_profile_name }}"
+    wait: yes
+    instance_tags:
+      Environment: "{{ ec2_tag_Environment }}"
+      Name: jupyter
+    exact_count: 1
+    count_tag:
+      Name: jupyter
+  register: ec2
+
+- name: Wait for SSH to come up
+  wait_for: host={{ item.public_dns_name }} port=22 delay=60 timeout=320 state=started
+  when: ec2.changed
+  with_items: ec2.instances
+
+- name: Add the host to the in-memory inventory
+  add_host: name={{ item.public_dns_name }} groups=ec2,tag_Name_jupyter
+  when: ec2.changed
+  with_items: ec2.instances

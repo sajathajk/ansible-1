@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "rkscript",
+    "python",
+    "{connection_file}",
+    "{{ ansible_user }}@{{ inventory_hostname }}"
+  ],
+  "display_name": "Remote Python Kernel",
+  "language": "python"
+}

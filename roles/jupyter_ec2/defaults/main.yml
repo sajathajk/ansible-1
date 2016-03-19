@@ -1,0 +1,5 @@
+---
+
+ec2_instance_type: t2.micro
+ec2_key_name: ansible_ec2
+ec2_iam_instance_profile_name: my_ec2_instance_profile

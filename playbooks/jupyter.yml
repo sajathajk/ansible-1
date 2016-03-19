@@ -1,0 +1,12 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+  - trusted_sg
+  - jupyter_ec2
+
+- hosts: tag_Name_jupyter
+  roles:
+  - jupyter

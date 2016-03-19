@@ -1,0 +1,81 @@
+---
+
+- name: Create EC2 SG to access SSH from PrivateVPN
+  local_action:
+    module: ec2_group
+    name: ssh_from_privatevpn_sg
+    description: SSH access from PrivateVPN IPs
+    region: "{{ ec2_region }}"
+    state: present
+    rules:
+    - proto: tcp
+      from_port: 22
+      to_port: 22
+      cidr_ip: 10.11.32.0/24
+    - proto: tcp
+      from_port: 22
+      to_port: 22
+      cidr_ip: 10.11.33.0/24
+    - proto: tcp
+      from_port: 22
+      to_port: 22
+      cidr_ip: 91.240.64.0/24
+    - proto: tcp
+      from_port: 22
+      to_port: 22
+      cidr_ip: 91.240.65.0/24
+    - proto: tcp
+      from_port: 22
+      to_port: 22
+      cidr_ip: 91.240.66.0/24
+    - proto: tcp
+      from_port: 22
+      to_port: 22
+      cidr_ip: 91.240.67.0/24
+    - proto: tcp
+      from_port: 22
+      to_port: 22
+      cidr_ip: 134.90.148.0/24
+
+- name: Create EC2 SG to access SSH from home
+  local_action:
+    module: ec2_group
+    name: ssh_from_home_sg
+    description: Access to SSH server from home IP
+    region: "{{ ec2_region }}"
+    state: present
+    rules:
+    - proto: tcp
+      from_port: 22
+      to_port: 22
+      cidr_ip: 80.216.189.11/32
+
+- name: Create HTTP/HTTPS outbound SG
+  local_action:
+    module: ec2_group
+    name: http_s_to_anywhere_sg
+    description: HTTP/HTTPS egress
+    region: "{{ ec2_region }}"
+    state: present
+    rules_egress:
+    - proto: tcp
+      from_port: 80
+      to_port: 80
+      cidr_ip: 0.0.0.0/0
+    - proto: tcp
+      from_port: 443
+      to_port: 443
+      cidr_ip: 0.0.0.0/0
+
+- name: Create NTP outbound SG
+  local_action:
+    module: ec2_group
+    name: ntp_to_anywhere_sg
+    description: NTP egress
+    region: "{{ ec2_region }}"
+    state: present
+    rules_egress:
+    - proto: udp
+      from_port: 123
+      to_port: 123
+      cidr_ip: 0.0.0.0/0

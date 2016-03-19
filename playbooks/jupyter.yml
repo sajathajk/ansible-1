@@ -9,4 +9,5 @@
 
 - hosts: tag_Name_jupyter
   roles:
+  - os_base
   - jupyter

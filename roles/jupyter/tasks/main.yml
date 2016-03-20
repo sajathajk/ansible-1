@@ -69,6 +69,7 @@
   - scikit-learn
   - skflow
   - matplotlib
+  - networkx
 
 - stat: path={{ ansible_env.HOME }}/xgboost
   register: xgb
@@ -91,7 +92,7 @@
 
 - block:
   - name: Clone Hyperopt repo
-    git: repo=https://github.com/hyperopt/hyperopt.git dest={{ ansible_env.HOME }}/hyperopt
+    git: repo=https://github.com/vilcenzo/hyperopt.git dest={{ ansible_env.HOME }}/hyperopt
   - name: Install Hyperopt python module
     command: python setup.py install
     args:

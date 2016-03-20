@@ -66,11 +66,9 @@
   - scipy
   - pandas
   - jupyter
-#  - https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.7.1-cp34-none-linux_x86_64.whl
   - scikit-learn
   - skflow
   - matplotlib
-#  - xgboost
 
 - stat: path={{ ansible_env.HOME }}/xgboost
   register: xgb
@@ -87,6 +85,18 @@
     args:
       chdir: "{{ ansible_env.HOME }}/xgboost/python-package"
   when: xgb.stat.exists == False
+
+- stat: path={{ ansible_env.HOME }}/hyperopt
+  register: hp
+
+- block:
+  - name: Clone Hyperopt repo
+    git: repo=https://github.com/hyperopt/hyperopt.git dest={{ ansible_env.HOME }}/hyperopt
+  - name: Install Hyperopt python module
+    command: python setup.py install
+    args:
+      chdir: "{{ ansible_env.HOME }}/hyperopt"
+  when: hp.stat.exists == False
 
 - name: Update remote kernel configuration
   local_action:

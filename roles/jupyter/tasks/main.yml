@@ -98,9 +98,3 @@
     args:
       chdir: "{{ ansible_env.HOME }}/hyperopt"
   when: hp.stat.exists == False
-
-- name: Update remote kernel configuration
-  local_action:
-    module: template
-    src: "{{ role_path }}/templates/kernel.json"
-    dest: "~/.ipython/kernels/template/kernel.json"

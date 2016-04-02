@@ -8,7 +8,7 @@
       "type": "ansible",
       "playbook_file": "./playbooks/jupyter.yml",
       "groups": ["all", "ec2", "tag_Name_jupyter"],
-      "extra_arguments": [ "--skip-tags", "infrastructure" ]
+      "extra_arguments": [ "--skip-tags", "infrastructure,client" ]
     }
   ],
   "builders": [
